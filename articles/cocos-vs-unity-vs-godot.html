@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</title>
+  <meta name="description" content="A working developer's pragmatic breakdown of Cocos Creator 3.8, Unity, and Godot for a one-person indie team: package-size ceilings, TypeScript support, platform targets, and the call I'd actually make." />
+  <link rel="canonical" href="https://phtbyte.com/articles/cocos-vs-unity-vs-godot.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026" />
+  <meta property="og:description" content="A pragmatic engine comparison for solo indies: package size, TypeScript, platform targets, and the call I'd actually make." />
+  <meta property="og:url" content="https://phtbyte.com/articles/cocos-vs-unity-vs-godot.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026",
+    "description": "A pragmatic engine comparison for solo indies: package size, TypeScript, platform targets, and the call I'd actually make.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-09-28",
+    "dateModified": "2026-09-28",
+    "mainEntityOfPage": "https://phtbyte.com/articles/cocos-vs-unity-vs-godot.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 11 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> For a one-person team in 2026, the engine question is mostly a constraint question, not a "which is most powerful" question. Cocos Creator 3.8 wins when package size and a WeChat / web mini-game target matter; Godot wins for a free, clean 2D/3D codebase you fully own; Unity still wins for 3D breadth, asset-store gravity, and team hiring. I ship on Cocos — but I'd pick differently for a different game.</p>
+
+      <div class="callout">
+        Disclosure: This article contains affiliate links (marked *). If you buy through them, I may earn a commission at no extra cost to you. I only link to courses and books I've actually found useful — they don't change what I recommend.
+      </div>
+
+      <h2>1. Why this matters more than it used to</h2>
+      <p>Five years ago the answer was almost always "Unity, unless you're a purist." In 2026 the math is messier. Unity's runtime-fee saga burned trust, Godot crossed a real usability threshold with 4.x, and Cocos quietly became the default for an entire platform (WeChat mini-games) that no Western engine serves well. For a solo dev, the wrong pick doesn't just cost time — it can cap your distribution before you write a line of gameplay.</p>
+
+      <p>I'm not arguing from benchmarks alone. I run a Cocos Creator 3.8 project in production (a 750×1334 survival/crafting mini-game), so the Cocos column below is lived experience, not a spec sheet. The Unity and Godot columns are from shipping-adjacent work and a lot of rebuilt prototypes.</p>
+
+      <h2>2. The three contenders, honestly</h2>
+
+      <h3>Cocos Creator 3.8</h3>
+      <p>Lightweight runtime, first-class TypeScript, and a build pipeline that targets WeChat and web directly. The trade-off is ecosystem: fewer off-the-shelf assets, a smaller hiring pool, and you'll build more UI plumbing yourself (which is exactly why I built a code-only widget library — see <a href="/articles/how-i-built-kubi.html">my Cocos mini-game post-mortem</a>).</p>
+
+      <h3>Unity</h3>
+      <p>Still the 800-pound gorilla for 3D. Asset Store, tutorials, and freelancers are unmatched. The friction is package size on constrained runtimes and a pricing story that's made teams nervous. If your game is 3D and you ever want to hire, it's hard to beat.</p>
+
+      <h3>Godot 4.x</h3>
+      <p>MIT-licensed, tiny, and shockingly capable for 2D. GDScript is fast to learn; C# is there if you want it. The weak spots are 3D maturity (improving, but not Unity) and a thinner commercial asset market. For a solo 2D project you own end-to-end, it's the cleanest "no strings" option.</p>
+
+      <h2>3. The comparison that actually decides it</h2>
+      <table class="compare">
+        <thead>
+          <tr><th>Factor</th><th>Cocos Creator 3.8</th><th>Unity</th><th>Godot 4.x</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Primary language</td><td>TypeScript</td><td>C#</td><td>GDScript / C#</td></tr>
+          <tr><td>First-load package size</td><td>Very small</td><td>Large (needs splitting)</td><td>Small</td></tr>
+          <tr><td>WeChat / web mini-game</td><td>Native target</td><td>Poor</td><td>Possible, not first-class</td></tr>
+          <tr><td>2D strength</td><td>Strong</td><td>Strong</td><td>Excellent</td></tr>
+          <tr><td>3D strength</td><td>Moderate</td><td>Excellent</td><td>Improving</td></tr>
+          <tr><td>Asset ecosystem</td><td>Small</td><td>Huge</td><td>Growing</td></tr>
+          <tr><td>Licensing risk</td><td>Low</td><td>Historically rocky</td><td>None (MIT)</td></tr>
+          <tr><td>Solo-dev ceiling</td><td>High for 2D/web</td><td>High, heavier</td><td>High, lightest</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. A decision framework, not a verdict</h2>
+      <p>Run your project through these four filters in order — the first one that bites usually decides:</p>
+
+      <h3>4.1 Package-size ceiling</h3>
+      <p>If you're targeting a runtime with a hard size limit (WeChat mini-games are the textbook case), Cocos or Godot start ahead because the runtime itself is small. Unity can work, but you'll spend real effort on addressables and subpackages. I hit this wall directly — splitting the engine into a subpackage was the single biggest first-load win on my project.</p>
+
+      <h3>4.2 TypeScript vs C#</h3>
+      <p>If your brain (and your existing code) is in TS/JS, Cocos feels native. If you came from enterprise C# or want maximum StackOverflow coverage, Unity's C# is the safer bet. Godot's GDScript is the fastest to pick up but the least transferable.</p>
+
+      <h3>4.3 Platform target</h3>
+      <p>WeChat / HTML5 mini-game → Cocos, no contest. Console or heavy 3D → Unity. A PC/Steam 2D game you want to own completely → Godot is a joy. "I'll port everywhere later" is where solo devs drown — pick the platform you'll actually ship to first.</p>
+
+      <h3>4.4 2D vs 3D split</h3>
+      <p>Most solo breakout hits are 2D. For 2D, Cocos and Godot both feel lighter than Unity. For anything genuinely 3D and ambitious, Unity's tooling and asset store still save months.</p>
+
+      <h2>5. The call I'd actually make</h2>
+      <ul>
+        <li><strong>Building a WeChat / web mini-game, 2D:</strong> Cocos Creator 3.8. It's what I use, and the package-size story is the difference between shipping and not.</li>
+        <li><strong>Building a Steam 2D game you own end-to-end:</strong> Godot 4.x. Free, tiny, no licensing anxiety, and the editor gets out of your way.</li>
+        <li><strong>Building 3D, or you might hire help:</strong> Unity. The ecosystem and talent pool are still the pragmatic default.</li>
+        <li><strong>Learning game dev from zero, on a budget:</strong> Godot, then Cocos for web — both free, both gentle.</li>
+      </ul>
+
+      <h2>6. What I'd tell my past self</h2>
+      <ol>
+        <li><strong>Decide the engine by the distribution channel first.</strong> I almost started in Unity for familiarity, then remembered the WeChat size ceiling would have eaten the whole project. Constraint-first saved me.</li>
+        <li><strong>Don't optimize the engine choice longer than a weekend.</strong> The engine is 5% of shipping. The loop, the art, and the retention work are the other 95%.</li>
+        <li><strong>Build UI as code, not prefabs.</strong> Whatever you pick, a small code-driven widget layer pays back fast — I wrote about the exact approach in my <a href="/articles/how-i-built-kubi.html">Cocos UI grid breakdown</a>.</li>
+      </ol>
+
+      <h2>7. Further learning (on Amazon)</h2>
+      <p>Prefer to learn from books you can keep? These are the titles I'd actually point a solo dev to. Prices change, so check the current price on the retailer's page via the link — every link below is an Amazon Associates link using my tag:</p>
+      <ul>
+        <li><a href="https://www.amazon.com/s?k=unity+game+development&tag=phtbyte-20">Unity game development books on Amazon*</a> — best for understanding the C# / 3D path.</li>
+        <li><a href="https://www.amazon.com/s?k=godot+game+development&tag=phtbyte-20">Godot 4.x guides on Amazon*</a> — the fastest on-ramp for the free 2D route.</li>
+        <li><a href="https://www.amazon.com/s?k=cocos+creator&tag=phtbyte-20">Cocos Creator references on Amazon*</a> — thinner shelf, but worth a scan if you go the mini-game route.</li>
+        <li><a href="https://www.amazon.com/s?k=game+design+theory+books&tag=phtbyte-20">Game design theory books on Amazon*</a> — the loop and retention reading that outlasts any engine.</li>
+      </ul>
+      <p><em>*Affiliate links: if you buy through them, I may earn a commission at no extra cost to you.</em></p>
+
+      <h2>8. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built a Cocos Creator WeChat Mini-Game — full post-mortem</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>

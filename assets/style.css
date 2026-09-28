@@ -121,6 +121,28 @@ article.post blockquote {
   margin: 0 0 18px;
 }
 
+article.post table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 22px;
+  font-size: 15px;
+}
+article.post table.compare th,
+article.post table.compare td {
+  border: 1px solid var(--border);
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+article.post table.compare thead th {
+  background: var(--accent-soft);
+  color: #2a3a55;
+  font-weight: 700;
+}
+article.post table.compare tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+
 footer.site {
   border-top: 1px solid var(--border);
   margin-top: 48px;

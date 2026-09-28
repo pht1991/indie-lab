@@ -106,6 +106,29 @@
 
 ## 第 3 步：Cloudflare DNS 解析（5 分钟）
 
+> ⚠️ **先做第 3.0 步（改 nameserver），否则第 3.1 步配的所有记录都不生效！**
+> 2026-09-28 实测踩坑：Cloudflare 里配好了记录，但域名 NS 还指着 Porkbun，全网解析都走 Porkbun 停放页（207.207.210.x），GitHub 报 `NotServedByPagesError`。
+
+### 第 3.0 步：把 nameserver 从 Porkbun 切到 Cloudflare（关键，10 分钟）
+
+1. 打开 **dash.cloudflare.com** → 确认 `phtbyte.com` 站点已添加（Free 计划即可）→ 进该域名 **Overview 页**，底部 **"Cloudflare Nameservers"** 会显示分配给你的 **2 个 NS**，形如：
+   ```
+   xxx.ns.cloudflare.com
+   yyy.ns.cloudflare.com
+   ```
+   （每人分配的不一样，**以你后台显示的为准**，抄下来。）
+2. 登录 **Porkbun** → **Domain Management** → 点 `phtbyte.com` → 找到 **Nameservers** 区块 → **Edit** → 选 **Custom Nameservers**（或 "Use custom nameservers"）→ 把 Cloudflare 那 2 个 NS 填进去，删掉 porkbun 默认的 4 个（curitiba/fortaleza/maceio/salvador.ns.porkbun.com）→ Save。
+   - ⚠️ 改完 NS 后，Porkbun 自带的停放页/邮件转发功能即失效（本来就要删，正好）。
+3. 等生效（通常 10 分钟 ~ 1 小时，最长 24h）。**验证方法**（本机 cmd/Git Bash）：
+   ```
+   nslookup -type=NS phtbyte.com 1.1.1.1
+   ```
+   返回 `xxx.ns.cloudflare.com` 两行 = 切换成功；还返回 `*.ns.porkbun.com` = 没生效，继续等。
+   再 `nslookup phtbyte.com 1.1.1.1` 确认 A 记录变成 `185.199.108~111.153`。
+4. 切换成功后，回 GitHub Pages 点 **Check again** → `DNS check successful`。
+
+### 第 3.1 步：Cloudflare 里配记录（NS 切换后再配/核对）
+
 进 dash.cloudflare.com → 选你的域名 → **DNS → Records** → 加以下记录：
 
 **A. 裸域名（apex，`你的域名.com`）—— 4 条 A 记录：**
@@ -179,6 +202,12 @@ dash.cloudflare.com → 你的域名 → **SSL/TLS → Overview** → 加密模�
 4. **初期 Proxy 开橙云导致 GitHub DNS 验证失败** → 先灰云，验证过再橙云。
 5. **A 记录填成带路径** → A 记录只能填 IP，不能填 `pht1991.github.io/xxx`。
 6. **Enforce HTTPS 不出现** → 等 DNS 完全传播（最多 24h），或清 DNS 缓存再看。
+7. **Porkbun 买的域名把 DNS 托管到 Cloudflare 后，导入会带进一批遗留记录，必须清理**（2026-09-28 实测）：
+   - ❌ 删 `*.phtbyte.com` CNAME → `uixie.porkbun.com`（Porkbun 停放页通配符，会劫持以后所有子域如 `lab.`/`news.` 跳到停放页）
+   - ❌ 删 2 条 MX（`fwd1/fwd2.porkbun.com`）+ SPF TXT（`v=spf1 include:_spf.porkbun...`）——都是 Porkbun 邮件转发的；**除非你要用 `xxx@phtbyte.com` 收邮件转发，否则全删**（以后想要再加回来即可）
+   - ❌ 删 2 条 `_acme-challenge` TXT（Porkbun 验证遗留，Cloudflare/GitHub 各自发证书用不到它）
+   - ✅ 保留 4 条 A（185.199.108~111.153）+ `www` CNAME（`pht1991.github.io`），但**代理状态点回「仅 DNS / 灰云」**——初期橙云会让 GitHub 的 DNS check 失败（GitHub 查到的全是 Cloudflare IP，无法确认归属），验证通过后再开橙云加速
+8. **Cloudflare 配好记录但 GitHub 仍报 `NotServedByPagesError`（2026-09-28 实测踩坑）** → 根因是 **nameserver 没从 Porkbun 切到 Cloudflare**：Cloudflare 里的记录只是"准备好的答案"，但全网问域名的还是 Porkbun 的 DNS（答的是停放页 207.207.210.x）。**先用 `nslookup -type=NS 域名 1.1.1.1` 查 NS 指向**，是 `*.ns.porkbun.com` 就按第 3.0 步切换到 Cloudflare 分配的 2 个 NS，等生效再 Check again。
 
 ---
 
