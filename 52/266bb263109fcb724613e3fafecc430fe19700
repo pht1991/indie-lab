@@ -1,0 +1,46 @@
+sitemap.xml
+  s_728d80fa8f3ebc::t_0ca6ba93d1284c 13-17
+assets/style.css
+  s_728d80fa8f3ebc::t_9d5b64ec887014 124-145
+index.html
+  s_728d80fa8f3ebc::t_cd203b82ca1e24 22
+  s_728d80fa8f3ebc::t_6b5b7d72283515 50
+  s_728d80fa8f3ebc::t_4c38b04e179d20 58-60
+articles/how-i-built-kubi.html
+  s_728d80fa8f3ebc::t_06dd6a4e13a761 21
+  s_728d80fa8f3ebc::t_2ba7503a5f2f0f 45
+AMAZON_ASSOCIATES.md
+  s_728d80fa8f3ebc::t_0c89d1836918ac 54
+  s_728d80fa8f3ebc::t_cd4b18af583786 1-33,35-53,55-65
+  s_728d80fa8f3ebc::t_8070e3d17acf3d 34
+DOMAIN_SETUP.md
+  s_728d80fa8f3ebc::t_a374afe7937711 205-209
+  s_728d80fa8f3ebc::t_ab5bb64876faeb 210
+  s_728d80fa8f3ebc::t_81753286aee0ef 109-131
+articles/cocos-vs-unity-vs-godot.html
+  s_728d80fa8f3ebc::t_8293b884d90885 1-116,119-122,124,126-143
+  s_728d80fa8f3ebc::t_e03352b3cc1288 117-118,123,125
+CONTENT_PLAN.md
+  s_728d80fa8f3ebc::t_cfc6e46ec1c049 27-28
+  s_728d80fa8f3ebc::t_304e1bcba8c741 14
+  s_728d80fa8f3ebc::t_f293b97b5ce0b1 1-13,15-26,29-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "52266bb263109fcb724613e3fafecc430fe19700",
+  "prompts": {},
+  "sessions": {
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3-x"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
