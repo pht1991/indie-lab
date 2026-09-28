@@ -1,0 +1,38 @@
+DOMAIN_SETUP.md
+  s_728d80fa8f3ebc::t_134013cd5c4e4d 26-27
+  s_728d80fa8f3ebc::t_3b1d95bcd24983 91
+  s_728d80fa8f3ebc::t_3399f365544a29 93-94,98,101,103
+  s_728d80fa8f3ebc::t_87032edc4339f1 96,99
+  s_728d80fa8f3ebc::t_9a3cf401fa1765 102
+  s_eba678c23bb111::t_56c0cc3ecf784b 1-25,28-90,92,95,97,100,104-190
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "f0c17415be139fcb0c22d4fbe371131202b4ced2",
+  "prompts": {},
+  "sessions": {
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    },
+    "s_eba678c23bb111": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "5262cddc-6d69-4699-8423-098850a1c09c",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
