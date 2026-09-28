@@ -103,6 +103,31 @@ article.post h3 { font-size: 19px; margin: 28px 0 10px; }
 article.post p { margin: 0 0 18px; }
 article.post ul, article.post ol { margin: 0 0 18px; padding-left: 22px; }
 article.post li { margin-bottom: 8px; }
+article.post pre {
+  background: #0f1115;
+  color: #e6edf3;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+article.post pre code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+article.post code {
+  background: #f0f1f4;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 0.88em;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  color: #c0264a;
+}
 article.post blockquote {
   margin: 0 0 18px;
   padding: 12px 18px;
