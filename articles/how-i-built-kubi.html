@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study</title>
+  <meta name="description" content="A from-the-trenches breakdown of shipping a 750×1334 survival/crafting mini-game on Cocos Creator 3.8: UI grid architecture, performance budget, i18n for overseas, and what I'd do differently." />
+  <link rel="canonical" href="https://phtbyte.com/articles/how-i-built-kubi.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study" />
+  <meta property="og:description" content="A from-the-trenches breakdown of shipping a survival/crafting mini-game on Cocos Creator 3.8." />
+  <meta property="og:url" content="https://phtbyte.com/articles/how-i-built-kubi.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study",
+    "description": "A from-the-trenches breakdown of shipping a survival/crafting mini-game on Cocos Creator 3.8.",
+    "author": { "@type": "Person", "name": "[Your Name]", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-09-22",
+    "dateModified": "2026-09-22",
+    "mainEntityOfPage": "https://phtbyte.com/articles/how-i-built-kubi.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study</h1>
+        <p class="meta">By [Your Name] · Game Developer &amp; Studio Owner · 12 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> I shipped a 750×1334 portrait survival/crafting mini-game on Cocos Creator 3.8 for the WeChat platform. This is the post-mortem — the architecture that held up, the performance traps I walked into, and the overseas-i18n work that turned a Chinese-only build into something portable.</p>
+
+      <div class="callout">
+        Disclaimer: this is a personal engineering write-up. Any tool or engine mentioned is based on my own usage; some links on this site may be affiliate links, but they never affect what I recommend.
+      </div>
+
+      <h2>1. Why this game, why this engine</h2>
+      <p>I wanted a game with a real progression loop — gather, craft, fight, dive dungeons — that still loads fast on a phone. WeChat's mini-game runtime is unforgiving about package size, so the engine choice was less "what's most powerful" and more "what fits the constraint." Cocos Creator 3.8 LTS won on three points: small runtime, real TypeScript support, and a build pipeline that targets WeChat directly.</p>
+
+      <p>I'm the one making the design calls, so the loop was built around a simple promise to the player: <em>every session should move a number that matters.</em> That single rule drove most of the UI decisions below.</p>
+
+      <h2>2. The UI layer: a code-only widget library</h2>
+      <p>The biggest architectural win was throwing out prefab-driven UI in favor of a small code-only widget library — think <code>UINode</code>, <code>UILabel</code>, <code>UIButton</code>, <code>UIVStack</code>/<code>UIHStack</code>, <code>UIGrid</code>. Reasons:</p>
+      <ul>
+        <li><strong>Determinism.</strong> Layout is a function of data, not a hand-placed node graph. Refactoring a panel meant editing code, not hunting prefab references.</li>
+        <li><strong>Smaller builds.</strong> No prefab serialization overhead for dozens of near-identical cells.</li>
+        <li><strong>Reuse.</strong> The same grid component drives the home page, the map, and the inventory — one positioning algorithm, three surfaces.</li>
+      </ul>
+
+      <p>The grid is a streaming layout: content height is computed from the row flow, the scroll view's viewport is fixed (not driven by a Widget, which fought <code>scrollToTop</code>), and each cell positions itself relative to <code>contentHeight/2</code>. That one detail killed a week of "scroll lands in the wrong place" bugs.</p>
+
+      <h2>3. Performance budget I had to respect</h2>
+      <p>Mini-game runtimes punish sloppiness. Three fixes moved the needle most:</p>
+      <ul>
+        <li><strong>Skybox cleanup.</strong> An unused 3D backdrop was eating draw calls for nothing. Gone.</li>
+        <li><strong>Engine subpackage.</strong> Splitting the engine out of the main package dropped first-load size hard — critical under WeChat's strict size ceiling.</li>
+        <li><strong>PerfTier.</strong> A runtime quality switch that scales effects to the device, so low-end phones don't choke and flagships aren't capped artificially.</li>
+      </ul>
+
+      <blockquote>Rule I now live by: profile before you optimize, but optimize the package size before you profile the frame rate. Size blocks the install; frame rate only blocks the retention.</blockquote>
+
+      <h2>4. The overseas problem: i18n without a rewrite</h2>
+      <p>The original build was Chinese-only, hardcoded strings everywhere. To make it portable I treated text as data:</p>
+      <ul>
+        <li>All visible strings routed through a single localization layer.</li>
+        <li>A shared <code>textMetrics</code> helper estimates label width from character class (CJK vs Latin) so layouts don't collapse when a short Chinese label becomes a long English sentence.</li>
+        <li>Structured fields over concatenated strings — e.g. an <code>isEquipped</code> flag instead of baking "[Equipped]" into the name — so translations stay clean.</li>
+      </ul>
+
+      <p>This is the part most post-mortems skip: <strong>localization is an architecture decision, not a find-and-replace pass.</strong> If you didn't build the seam in week one, you pay for it in a rewrite.</p>
+
+      <h2>5. What I'd do differently</h2>
+      <ol>
+        <li><strong>Design the save/cloud layer earlier.</strong> Retention lives or dies on "I can pick this up tomorrow," and that needs a sync story, not a localStorage gamble.</li>
+        <li><strong>Ship one deep loop, not five shallow ones.</strong> The dungeon, the trade system, and the crafting tree each wanted to be the star. Picking one to go deep first would have shipped sooner.</li>
+        <li><strong>Measure fun, not just frames.</strong> I had a perf dashboard before I had a retention dashboard. Inverted priority.</li>
+      </ol>
+
+      <h2>6. Takeaways for other small teams</h2>
+      <p>If you're building a mini-game or web game on a tight runtime: choose the engine by package-size ceiling first, build UI as code not prefabs, and treat i18n as a foundation pour, not a coat of paint. The game below the surface is the same game everywhere — only the words and the width of the text box change.</p>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
