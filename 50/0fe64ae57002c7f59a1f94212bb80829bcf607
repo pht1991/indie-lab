@@ -1,0 +1,28 @@
+assets/style.css
+  s_728d80fa8f3ebc::t_10376c407ab002 106-130
+sitemap.xml
+  s_728d80fa8f3ebc::t_55ddcba3881f36 18-22
+articles/cocos-web-game-i18n-guide.html
+  s_728d80fa8f3ebc::t_8690176e9c81e3 1-141
+index.html
+  s_728d80fa8f3ebc::t_1ed68b53c3408d 53-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "500fe64ae57002c7f59a1f94212bb80829bcf607",
+  "prompts": {},
+  "sessions": {
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3-x"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
