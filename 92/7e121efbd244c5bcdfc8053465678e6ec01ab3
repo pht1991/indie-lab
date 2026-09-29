@@ -1,0 +1,39 @@
+sitemap.xml
+  s_2421242316b263::t_1951d6d096502f 43-47
+.workbuddy/memory/MEMORY.md
+  s_2421242316b263::t_43e04fef83f759 43
+  s_2421242316b263::t_a2c0eecdcf5a49 32,35,44
+.workbuddy/memory/2026-09-29.md
+  s_2421242316b263::t_21b57ac1cf7f63 89-97
+  s_2421242316b263::t_26599b9dadea97 98-103
+articles/indie-games-2026.html
+  s_2421242316b263::t_1f322e0d10c542 6-7,10-11,16,24-25,49,53
+  s_2421242316b263::t_6f64acef205bd7 73,76,85,88,90,95,110,112
+  s_2421242316b263::t_aac774b70ce491 1-5,8-9,12-15,17-23,26-48,50-52,54-59,61-72,74-75,77-84,86-87,89,91-94,96-109,111,113-173
+  s_2421242316b263::t_1027c89fa5a8dc 60
+assets/og/gen-og.cjs
+  s_2421242316b263::t_38e2f22099293d 61
+index.html
+  s_2421242316b263::t_14b5a02f9b5643 79
+  s_2421242316b263::t_8d5739aeb03276 78,80-81
+  s_2421242316b263::t_530f77f1cf5fc2 77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "927e121efbd244c5bcdfc8053465678e6ec01ab3",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3-x"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
