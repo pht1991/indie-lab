@@ -29,10 +29,10 @@
 - **OG 图**：`assets/og/gen-og.cjs` 用 **SVG 精确排版 → @resvg/resvg-js 栅格 1200×630 PNG**（AI 生图文字会糊，弃用；环境无 ImageMagick，`convert` 是 Windows 磁盘工具）。每篇 1 张，深色技术风品牌模板。改 `jobs` 数组加条目可幂等重渲全部。
 - **视觉原则**：**不上 stock 图**（联盟站信任减分）；正文用 SVG 自绘（零托管、SEO 友好）；OG 图走 branded 深色排版。
 - **发布同步项**：每篇需同步更新 `sitemap.xml`（加 `<url>`）+ `index.html` 列表 + 检查 og:image/figure/内链/占位（`[Your Name]`/`href="#"`/`(Stub)` 必须清零）。
-- **首页列表排序铁律（2026-09-29 定）**：**权威优先，非时间优先**。技术文（蓝海案例/拆解/教程）占前排立 EEAT；变现/购买指南文（#6 键盘、#7 工具）**一律垫底**（仍在首页+靠技术文内链导流，转化更高）。当前顺序：kubi→引擎对比(#2)→包体(#5)→idle(#4)→i18n(#3)→工具(#7)→键盘(#6)。section 标题已从 `Latest Field Notes` 改为 `Field Notes`（避免"最新在上"预期）。新文按此规则插位，**不要按发布时间把变现文顶到前排**。
+- **首页列表排序铁律（2026-09-29 定）**：**权威优先，非时间优先**。技术文（蓝海案例/拆解/教程）占前排立 EEAT；变现/购买指南文（#6 键盘、#7 工具）**一律垫底**（仍在首页+靠技术文内链导流，转化更高）；红海漏斗文（#8 indie games）插在权威文与变现文之间（漏斗引流，非变现，不放垫底）。当前顺序：kubi→引擎对比(#2)→包体(#5)→idle(#4)→i18n(#3)→indie games(#8)→工具(#7)→键盘(#6)。section 标题已从 `Latest Field Notes` 改为 `Field Notes`（避免"最新在上"预期）。新文按此规则插位，**不要按发布时间把变现文顶到前排**。
 - **署名**：作者统一 **Haitao Pan**（与税务/Payoneer 一致，EEAT）。
 
-## 已产内容（截至 2026-09-29，共 7 篇，#4/#5/#6/#7 待用户 git push）
+## 已产内容（截至 2026-09-29，共 8 篇，#8 待用户 git push；#1~#7 已推）
 1. `how-i-built-kubi.html` — kubi 案例（Cocos 3.8 微信小游戏架构/UI 网格/性能）
 2. `cocos-vs-unity-vs-godot.html` — 引擎选型（首篇带 Amazon 书单联盟）
 3. `cocos-web-game-i18n-guide.html` — i18n 完整指南（长尾）
@@ -40,7 +40,8 @@
 5. `bundle-size-optimization.html` — 包体优化 60%（引擎分包 + PerfTier，长尾）
 6. `best-mechanical-keyboards.html` — 机械键盘（**首篇真带 Amazon 实物联盟 gear 利润锚**，FTC+5 链接 phtbyte-20）
 7. `indie-tools-2026.html` — 工具清单（蓝海，首篇 SaaS 联盟锚；PartnerStack/Awin 未注册，链接暂用官网直链 + FTC 标注"接入后回填"，非负 Amazon、无 tag=phtbyte-20）
-- **下一篇 #8**：`(待定)`《10 Indie Games You Missed in 2026》→ 红海流量漏斗，内链回蓝海技术文（#2/#4/#9）。
+8. `indie-games-2026.html` — 《7 Indie Games You Missed in 2026 (and What Devs Can Learn)》（**红海流量漏斗文**，无联盟，游戏名链接指向 Steam 搜索页非联盟；内链回 #2/#4/#5/#1 四篇蓝海，2 张 SVG：四课框架 + 漏斗路由图）
+- **下一篇 #9**：蓝海长尾技术文（建议 Cocos 专项教程，或人设文补足 8 蓝+1 红+1 人设配比）。
 
 ## 用户协作偏好（跨项目）
 - **不自动 git commit/push**：改动留本地，用户自己 review 后提交推送（用户显式要求时例外）。
