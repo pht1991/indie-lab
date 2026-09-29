@@ -28,7 +28,8 @@
 - **文章结构约定**：`articles/<slug>.html`；head 必含 canonical(https) + OG/Twitter（含 og:image）+ JSON-LD(Article, author=Haitao Pan)；正文 TL;DR → 各节（含 ≥2 张自绘 SVG `figure.diagram`）→ FTC 披露（affiliate 文）→ related-reads 内链（≥2 条，回已发文）。
 - **OG 图**：`assets/og/gen-og.cjs` 用 **SVG 精确排版 → @resvg/resvg-js 栅格 1200×630 PNG**（AI 生图文字会糊，弃用；环境无 ImageMagick，`convert` 是 Windows 磁盘工具）。每篇 1 张，深色技术风品牌模板。改 `jobs` 数组加条目可幂等重渲全部。
 - **视觉原则**：**不上 stock 图**（联盟站信任减分）；正文用 SVG 自绘（零托管、SEO 友好）；OG 图走 branded 深色排版。
-- **发布同步项**：每篇需同步更新 `sitemap.xml`（加 `<url>`）+ `index.html` 列表（插新文）+ 检查 og:image/figure/内链/占位（`[Your Name]`/`href="#"`/`(Stub)` 必须清零）。
+- **发布同步项**：每篇需同步更新 `sitemap.xml`（加 `<url>`）+ `index.html` 列表 + 检查 og:image/figure/内链/占位（`[Your Name]`/`href="#"`/`(Stub)` 必须清零）。
+- **首页列表排序铁律（2026-09-29 定）**：**权威优先，非时间优先**。技术文（蓝海案例/拆解/教程）占前排立 EEAT；变现/购买指南文（#6 键盘、#7 工具）**一律垫底**（仍在首页+靠技术文内链导流，转化更高）。当前顺序：kubi→引擎对比(#2)→包体(#5)→idle(#4)→i18n(#3)→工具(#7)→键盘(#6)。section 标题已从 `Latest Field Notes` 改为 `Field Notes`（避免"最新在上"预期）。新文按此规则插位，**不要按发布时间把变现文顶到前排**。
 - **署名**：作者统一 **Haitao Pan**（与税务/Payoneer 一致，EEAT）。
 
 ## 已产内容（截至 2026-09-29，共 7 篇，#4/#5/#6/#7 待用户 git push）
