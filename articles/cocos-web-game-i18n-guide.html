@@ -10,7 +10,12 @@
   <meta property="og:title" content="The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)" />
   <meta property="og:description" content="A from-the-trenches i18n architecture for Cocos Creator 3.8 web and mini-game builds." />
   <meta property="og:url" content="https://phtbyte.com/articles/cocos-web-game-i18n-guide.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-i18n.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The complete guide to i18n in a Cocos web game, without a rewrite" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-i18n.png" />
   <link rel="stylesheet" href="/assets/style.css" />
   <script type="application/ld+json">
   {
@@ -75,6 +80,42 @@
 
       <p>A single <code>tr(key, params)</code> helper resolves the active locale and fills placeholders. Components subscribe to a locale-change event and re-render their own text. That's the whole foundation — every panel now talks to the table, never to a literal.</p>
 
+      <figure class="diagram">
+        <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="i18n data flow: component requests key, locale table resolves, textMetrics estimates width, layout sizes the node">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- row 1 -->
+          <rect x="30" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="105" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Component</text>
+          <text x="105" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">asks for text</text>
+          <line x1="180" y1="56" x2="222" y2="56" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="230" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="305" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">tr(key, params)</text>
+          <text x="305" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">one seam, no literals</text>
+          <line x1="380" y1="56" x2="422" y2="56" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="430" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="505" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Locale table</text>
+          <text x="505" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">en / zh / ja JSON</text>
+          <!-- row 2 -->
+          <line x1="505" y1="82" x2="505" y2="112" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="430" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="505" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">textMetrics</text>
+          <text x="505" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">estimates width</text>
+          <line x1="430" y1="144" x2="388" y2="144" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="230" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="305" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Layout</text>
+          <text x="305" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">sizes the node</text>
+          <line x1="230" y1="144" x2="188" y2="144" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="30" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="105" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Render</text>
+          <text x="105" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">engine assembler</text>
+        </svg>
+        <figcaption>The whole i18n seam: components never hold literals — they ask, resolve, measure, then render.</figcaption>
+      </figure>
+
       <p>This is the same discipline I described in my <a href="/articles/how-i-built-kubi.html">Cocos mini-game post-mortem</a>: build UI as code, and treat strings as just another data field.</p>
 
       <h2>3. The part most guides skip: width estimation</h2>
@@ -97,6 +138,37 @@ export function estimateTextWidth(text: string, fontSize: number): number {
 }</code></pre>
 
       <p>With that, a parent container can size itself from the <em>estimated</em> width of the active language before the engine's own text layout runs. It's not pixel-perfect (the engine's assembler is the source of truth at render time), but it gets panels into the right ballpark so nothing overflows on first paint. When a label has no fixed width, I leave it auto-sized; when it does, I recompute position from the estimated width rather than assuming the Chinese baseline.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Width estimation: the CJK label is 3 full-width units, the English label is 8 narrow units and ends up wider">
+          <text x="30" y="34" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Same meaning, different width</text>
+          <!-- CJK row -->
+          <text x="30" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a1a1a">已装备</text>
+          <g fill="#2f6df0">
+            <rect x="110" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+            <rect x="146" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+            <rect x="182" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+          </g>
+          <text x="230" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">3 glyphs × 1.0 = 3.0 units</text>
+          <!-- EN row -->
+          <text x="30" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a1a1a">Equipped</text>
+          <g stroke="#f0b429" fill="#f0b429" fill-opacity="0.15">
+            <rect x="110" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="130.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="151" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="171.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="192" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="212.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="233" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="253.5" y="130" width="16.5" height="30" rx="4"/>
+          </g>
+          <text x="286" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">8 glyphs × 0.55 = 4.4 units</text>
+          <!-- marker line -->
+          <line x1="200" y1="106" x2="200" y2="122" stroke="#c0264a" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="212" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#c0264a">assuming the CJK width clips here</text>
+        </svg>
+        <figcaption>Why layout collapses: the English copy of a 3-glyph Chinese label is ~47% wider. Estimate per character class, not per string.</figcaption>
+      </figure>
 
       <h2>4. Structured fields beat concatenated strings</h2>
       <p>A tempting shortcut is to bake state into the name: <code>"[Equipped] Iron Sword"</code>. Don't. It forces every locale to re-express the bracket convention and breaks layout symmetry. Instead, push the flag into data:</p>

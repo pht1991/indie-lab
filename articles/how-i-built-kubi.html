@@ -10,7 +10,12 @@
   <meta property="og:title" content="How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study" />
   <meta property="og:description" content="A from-the-trenches breakdown of shipping a survival/crafting mini-game on Cocos Creator 3.8." />
   <meta property="og:url" content="https://phtbyte.com/articles/how-i-built-kubi.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-kubi.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="How I Built Super Miserable Adventurer — a Cocos Creator WeChat mini-game case study" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-kubi.png" />
   <link rel="stylesheet" href="/assets/style.css" />
   <script type="application/ld+json">
   {
@@ -56,6 +61,40 @@
 
       <p>I'm the one making the design calls, so the loop was built around a simple promise to the player: <em>every session should move a number that matters.</em> That single rule drove most of the UI decisions below.</p>
 
+      <figure class="diagram">
+        <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Core loop: gather, craft, fight, dungeon, repeating clockwise around a center promise">
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- center promise -->
+          <rect x="220" y="112" width="240" height="76" rx="12" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="340" y="143" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Every session moves</text>
+          <text x="340" y="166" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">a number that matters</text>
+          <!-- four stations -->
+          <rect x="60" y="30" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="135" y="59" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Gather</text>
+          <rect x="470" y="30" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="545" y="59" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Craft</text>
+          <rect x="470" y="222" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="545" y="251" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Fight</text>
+          <rect x="60" y="222" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="135" y="251" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Dungeon</text>
+          <!-- clockwise arrows -->
+          <line x1="210" y1="54" x2="462" y2="54" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="545" y1="78" x2="545" y2="214" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="470" y1="246" x2="218" y2="246" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="135" y1="222" x2="135" y2="86" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <!-- spokes to center -->
+          <line x1="180" y1="90" x2="240" y2="122" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="500" y1="90" x2="440" y2="122" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="500" y1="210" x2="440" y2="178" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="180" y1="210" x2="240" y2="178" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+        </svg>
+        <figcaption>The loop everything serves. Each station feeds the center promise — if a feature doesn't move a number, it didn't ship.</figcaption>
+      </figure>
+
       <h2>2. The UI layer: a code-only widget library</h2>
       <p>The biggest architectural win was throwing out prefab-driven UI in favor of a small code-only widget library — think <code>UINode</code>, <code>UILabel</code>, <code>UIButton</code>, <code>UIVStack</code>/<code>UIHStack</code>, <code>UIGrid</code>. Reasons:</p>
       <ul>
@@ -65,6 +104,31 @@
       </ul>
 
       <p>The grid is a streaming layout: content height is computed from the row flow, the scroll view's viewport is fixed (not driven by a Widget, which fought <code>scrollToTop</code>), and each cell positions itself relative to <code>contentHeight/2</code>. That one detail killed a week of "scroll lands in the wrong place" bugs.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Widget library layers: game panels on top, layout components in the middle, primitives below, Cocos runtime at the base">
+          <defs>
+            <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <rect x="60" y="24" width="560" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="340" y="47" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Game panels — Home · Map · Bag · Battle · Trade</text>
+          <text x="340" y="67" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">declare data + intent, never touch nodes directly</text>
+          <line x1="340" y1="76" x2="340" y2="98" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="102" width="560" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="340" y="125" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Layout components — UIGrid · UIVStack · UIHStack</text>
+          <text x="340" y="145" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">one positioning algorithm, three surfaces</text>
+          <line x1="340" y1="154" x2="340" y2="176" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="180" width="560" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="340" y="203" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Primitives — UINode · UILabel · UIButton · UIShape</text>
+          <text x="340" y="223" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">code-built, pooled, no prefabs</text>
+          <line x1="340" y1="232" x2="340" y2="248" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="252" width="560" height="8" rx="4" fill="#2f6df0" fill-opacity="0.25"/>
+          <text x="340" y="276" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Cocos Creator 3.8 nodes &amp; components</text>
+        </svg>
+        <figcaption>The code-only UI stack. Panels talk down one layer at a time — swapping the grid algorithm never touches a panel.</figcaption>
+      </figure>
 
       <h2>3. Performance budget I had to respect</h2>
       <p>Mini-game runtimes punish sloppiness. Three fixes moved the needle most:</p>

@@ -136,6 +136,22 @@ article.post blockquote {
   color: #2a3a55;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+
+/* ---- inline SVG figures ---- */
+figure.diagram {
+  margin: 28px 0;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+figure.diagram svg { display: block; width: 100%; height: auto; }
+figure.diagram figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
 .callout {
   background: #fff8e6;
   border: 1px solid #f0e0b0;
