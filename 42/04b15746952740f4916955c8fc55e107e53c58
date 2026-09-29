@@ -1,0 +1,58 @@
+articles/best-mechanical-keyboards.html
+  s_728d80fa8f3ebc::t_777c373258a6eb 1-170
+sitemap.xml
+  s_728d80fa8f3ebc::t_054b7190863d0e 33-37
+  s_2421242316b263::t_35057860921282 38-42
+assets/og/gen-og.cjs
+  s_2421242316b263::t_560ab5b1ca1982 60
+  s_728d80fa8f3ebc::t_b4d20e559ea294 59
+.workbuddy/memory/MEMORY.md
+  s_728d80fa8f3ebc::t_8dc4121bc0b4f8 1-33,35-40,43-46
+  s_2421242316b263::t_9eeca178411088 34,41-42
+index.html
+  s_728d80fa8f3ebc::t_a3f53d6e9a70f3 63-66
+  s_2421242316b263::t_e47130c2756985 57-62
+.workbuddy/memory/2026-09-29.md
+  s_2421242316b263::t_bf4845f052d6c3 78-83
+  s_728d80fa8f3ebc::t_9798dd8a84fb26 1-77
+articles/indie-tools-2026.html
+  s_2421242316b263::t_039b50c22832b9 1-164
+.workbuddy/memory/2026-09-21.md
+  s_728d80fa8f3ebc::t_1231ada97f8feb 1-31
+.workbuddy/memory/2026-09-22.md
+  s_728d80fa8f3ebc::t_36fd91117cdc5d 1-14
+.workbuddy/memory/2026-09-24.md
+  s_728d80fa8f3ebc::t_ca0ab141bb540f 1-49
+.workbuddy/memory/2026-09-28.md
+  s_728d80fa8f3ebc::t_563a9cbcd4ae39 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "4204b15746952740f4916955c8fc55e107e53c58",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    },
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
