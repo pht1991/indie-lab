@@ -1,0 +1,38 @@
+assets/og/gen-og.cjs
+  s_728d80fa8f3ebc::t_4fe5928d1cfd73 1-67
+articles/how-i-built-kubi.html
+  s_728d80fa8f3ebc::t_e842e724bd5f31 64-97
+  s_728d80fa8f3ebc::t_7e608714e15a36 108-132
+  s_728d80fa8f3ebc::t_6beb2e10391bbc 13-16,18
+articles/cocos-web-game-i18n-guide.html
+  s_728d80fa8f3ebc::t_b0a2f2d9eccea8 13-16,18
+  s_728d80fa8f3ebc::t_d28dd50eb75e1f 83-118
+  s_728d80fa8f3ebc::t_fd97c259dfbc43 142-172
+index.html
+  s_728d80fa8f3ebc::t_922d0658362598 13-16,18
+articles/cocos-vs-unity-vs-godot.html
+  s_728d80fa8f3ebc::t_c800f7a9a6f193 92-110
+  s_728d80fa8f3ebc::t_23abc7b0c1e521 114-157
+  s_728d80fa8f3ebc::t_b543e4110eda7e 13-16,18
+assets/style.css
+  s_728d80fa8f3ebc::t_1fad006aa093a5 139-154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "66f2c50f1745acc534c5eb60e595df8442031b8a",
+  "prompts": {},
+  "sessions": {
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
