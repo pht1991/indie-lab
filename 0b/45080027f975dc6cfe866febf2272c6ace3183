@@ -1,0 +1,29 @@
+articles/bundle-size-optimization.html
+  s_728d80fa8f3ebc::t_512fa142e2f3c1 1-187
+index.html
+  s_728d80fa8f3ebc::t_762ac66ff0af8d 58-61
+  s_728d80fa8f3ebc::t_3b4c31e76f9dcc 57
+assets/og/gen-og.cjs
+  s_728d80fa8f3ebc::t_2231d4471e03e4 58
+sitemap.xml
+  s_728d80fa8f3ebc::t_26add48a6d4766 28-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "0b45080027f975dc6cfe866febf2272c6ace3183",
+  "prompts": {},
+  "sessions": {
+    "s_728d80fa8f3ebc": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "ca40d8fc-96ab-4b95-8445-7d8602b975b0",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
