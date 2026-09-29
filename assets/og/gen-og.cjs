@@ -55,6 +55,7 @@ const jobs = [
   { file: 'og-engine.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator vs Unity', 'vs Godot'], subtitle: 'Which Engine for a Solo Indie in 2026' } },
   { file: 'og-i18n.png', data: { chip: 'INDIE GAME LAB', titleLines: ['The Complete Guide to', 'i18n in a Cocos Web Game'], subtitle: 'Without a Rewrite — Localization Architecture' } },
   { file: 'og-loop.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Designing a Satisfying', 'Idle Loop'], subtitle: 'Lessons from Shipping a Survival RPG' } },
+  { file: 'og-bundle.png', data: { chip: 'INDIE GAME LAB', titleLines: ['How I Cut My Mini-Game', 'Bundle Size 60%'], subtitle: 'Engine Subpackaging + PerfTier — A Cocos Teardown' } },
 ];
 
 mkdirSync(OUT, { recursive: true });

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How I Cut My Mini-Game Bundle Size 60%</title>
+  <meta name="description" content="A teardown of how I shrank a Cocos Creator mini-game's load footprint by ~60%: engine subpackaging, asset splitting, texture audits, dead-resource cleanup, and a runtime PerfTier that streams assets by device capability." />
+  <link rel="canonical" href="https://phtbyte.com/articles/bundle-size-optimization.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="How I Cut My Mini-Game Bundle Size 60% (Engine Subpackaging + PerfTier)" />
+  <meta property="og:description" content="A Cocos mini-game teardown: engine subpackaging, asset splitting, and a runtime PerfTier that streams by device." />
+  <meta property="og:url" content="https://phtbyte.com/articles/bundle-size-optimization.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-bundle.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="How I cut my mini-game bundle size 60% — engine subpackaging and PerfTier" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-bundle.png" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How I Cut My Mini-Game Bundle Size 60% (Engine Subpackaging + PerfTier)",
+    "description": "A Cocos mini-game teardown: engine subpackaging, asset splitting, and a runtime PerfTier that streams assets by device capability.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-09-29",
+    "dateModified": "2026-09-29",
+    "mainEntityOfPage": "https://phtbyte.com/articles/bundle-size-optimization.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>How I Cut My Mini-Game Bundle Size 60%</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 10 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> Load time is retention. I shipped a 750×1334 portrait mini-game on Cocos Creator 3.8, and the single biggest perceived-speed win wasn't a faster engine — it was shipping less. Engine subpackaging, splitting assets behind the first screen, one brutal texture audit (the skydome went), dead-resource cleanup, and a runtime <em>PerfTier</em> that streams assets by device capability together cut the initial footprint by roughly 60%. Here's the teardown.</p>
+
+      <h2>1. Why bundle size is a gameplay problem</h2>
+      <p>On desktop, a few extra megabytes are invisible. On a phone over a flaky connection, the gap between "tap" and "playable" is the difference between a player who stays and a player who bounces. I treat initial load as part of the core loop — a slow first paint is just a bad first session. The goal wasn't a smaller number on a dashboard; it was a shorter wait before the first meaningful frame.</p>
+
+      <p>This is the same project I wrote up in my <a href="/articles/how-i-built-kubi.html">Cocos Creator mini-game post-mortem</a>. The optimization pass came later, when the feature set was frozen and I could finally measure what was actually being shipped. The results below are directional — I'm not publishing exact byte counts, because your numbers will differ by asset, but the shape of the wins transfers.</p>
+
+      <h2>2. The biggest lever: stop shipping the engine inline</h2>
+      <p>The engine runtime is the largest single block in almost any Cocos build. The default packaging inlines it into your main bundle, so every player downloads the whole thing up front even if they only ever see the menu. The fix is to <strong>subpackage the engine</strong> so it loads as a separate, cacheable module rather than a monolith behind first paint.</p>
+
+      <p>In practice this meant flipping the build's <code>separateEngine</code> flag and re-running the build so the engine artifact is emitted as its own file. The first-screen script then pulls a much smaller shell first, and the engine module loads in parallel / on demand. The exact toggle name varies by target platform, but the principle is universal: <em>the engine is infrastructure, not content — keep it out of the critical path.</em></p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Initial download before and after: a single monolithic bundle versus engine split from first-screen content">
+          <defs>
+            <marker id="ba2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <text x="20" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Before: one monolith</text>
+          <rect x="20" y="44" width="280" height="34" rx="8" fill="#fdeaea" stroke="#e05656"/>
+          <text x="160" y="66" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">engine + content (blocks first paint)</text>
+          <line x1="320" y1="61" x2="392" y2="61" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#ba2)"/>
+          <text x="400" y="28" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">After: split</text>
+          <rect x="400" y="44" width="120" height="34" rx="8" fill="#eaf7ee" stroke="#27ae60"/>
+          <text x="460" y="66" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">first-screen</text>
+          <rect x="540" y="44" width="120" height="34" rx="8" fill="#eaf1ff" stroke="#2f6df0"/>
+          <text x="600" y="66" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">engine (cached)</text>
+          <text x="400" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">First paint waits only on the small shell; the engine loads</text>
+          <text x="400" y="128" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">separately and stays cached for every later visit.</text>
+          <text x="20" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9aa6b8">Note: on platforms with an engine-plugin CDN, subpackaging can be replaced by referencing the shared engine — same idea, even smaller first download.</text>
+        </svg>
+        <figcaption>Moving the engine out of the critical path was the single largest cut — and it also improves repeat-visit load because the engine module is cacheable.</figcaption>
+      </figure>
+
+      <h2>3. Split assets behind the first screen</h2>
+      <p>Engine subpackaging helps the shell, but content assets (scenes, atlases, audio) were the next block. Most players never touch 80% of them in a single session. I moved everything past the home screen into <strong>on-demand subpackages</strong> that load when the relevant scene actually opens.</p>
+
+      <p>The mental model: the home/menu screen should be the <em>only</em> thing in the initial footprint. Every deeper scene — battle, dungeon, inventory — becomes a separately-fetched chunk. Cocos supports dynamic asset loading and subpackage manifests; the work is mostly discipline, not cleverness. Audit your scenes, draw a line at "what the player sees in the first 3 seconds," and push everything below that line out of the main bundle.</p>
+
+      <h2>4. The texture audit nobody enjoys (and the skydome that had to go)</h2>
+      <p>This is the part that actually hurt. I rendered a single-frame 3D skydome for ambience — a large texture that was on screen for maybe two seconds of a session, and only as a backdrop. It was dead weight on every load. I deleted it and replaced the ambience with a flat gradient (or a tiny baked backdrop). No player noticed. The bundle did.</p>
+
+      <p>The audit process that found it:</p>
+      <ol>
+        <li><strong>List every texture over a threshold</strong> (say, larger than 256 KB) and ask "does this earn its place on first load?"</li>
+        <li><strong>Right-size</strong> — most UI textures were exported at 2× their display size. Downscaling to actual device resolution recovered a surprising amount.</li>
+        <li><strong>Compress</strong> — moving suitable textures to a compressed format (platform-dependent) cut memory <em>and</em> download size.</li>
+        <li><strong>De-duplicate</strong> — the auto-atlas tool had silently emitted near-identical sheets. Consolidating them removed overlap.</li>
+      </ol>
+
+      <p>The lesson: a 3D scene's pretty-but-optional assets are the easiest fat to cut. Be ruthless about "ambience" — if a player can't name it, they won't miss it, but they <em>will</em> feel the faster load.</p>
+
+      <h2>5. Dead resources: what the build keeps that you forgot</h2>
+      <p>Engines are conservative — they bundle anything that <em>might</em> be referenced. Over a long project, that accumulates: an old prefab, a retired audio clip, a test scene. None of it shows up in your gameplay, all of it shows up in your bundle.</p>
+
+      <p>My cleanup pass:</p>
+      <ul>
+        <li>Removed unreferenced prefabs and test scenes from the build manifest.</li>
+        <li>Stripped unused audio (placeholder SFX that never got replaced).</li>
+        <li>Turned on aggressive auto-atlas consolidation so only referenced sprites ship.</li>
+      </ul>
+
+      <p>This is the same "structured data, not hardcoded" discipline I applied to the <a href="/articles/cocos-web-game-i18n-guide.html">i18n layer</a> — when assets are referenced through a single index rather than scattered ad-hoc imports, it's possible to actually see what's unused.</p>
+
+      <h2>6. PerfTier: don't make low-end phones download what they can't show</h2>
+      <p>The deepest win was runtime, not build-time: a <strong>PerfTier</strong> system that detects device capability at launch and streams a different asset profile accordingly. Low-end devices get smaller textures and skip optional effects; high-end devices get the full set. Crucially, the <em>light</em> profile is the default first download, and heavier assets upgrade in after the game is already playable.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="At launch, detect device tier; low and mid tiers stream a light asset set, high tier upgrades to full after first playable frame">
+          <defs>
+            <marker id="pt2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <rect x="20" y="20" width="140" height="52" rx="12" fill="#eaf1ff" stroke="#2f6df0" stroke-width="2"/>
+          <text x="90" y="44" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">Launch</text>
+          <text x="90" y="62" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">detect tier</text>
+          <line x1="160" y1="46" x2="210" y2="46" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#pt2)"/>
+          <text x="214" y="38" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">PerfTier</text>
+
+          <rect x="280" y="20" width="120" height="48" rx="10" fill="#eaf7ee" stroke="#27ae60"/>
+          <text x="340" y="42" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Low</text>
+          <text x="340" y="60" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">light set</text>
+          <rect x="280" y="92" width="120" height="48" rx="10" fill="#eaf7ee" stroke="#27ae60"/>
+          <text x="340" y="114" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Mid</text>
+          <text x="340" y="132" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">light + extras</text>
+          <rect x="280" y="164" width="120" height="48" rx="10" fill="#fff4e0" stroke="#e0a020"/>
+          <text x="340" y="186" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">High</text>
+          <text x="340" y="204" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">full, upgrades later</text>
+
+          <line x1="160" y1="46" x2="210" y2="46" stroke="#6b6b6b" stroke-width="1.6"/>
+          <line x1="210" y1="46" x2="210" y2="188" stroke="#6b6b6b" stroke-width="1.4"/>
+          <line x1="210" y1="44" x2="280" y2="44" stroke="#6b6b6b" stroke-width="1.4" marker-end="url(#pt2)"/>
+          <line x1="210" y1="116" x2="280" y2="116" stroke="#6b6b6b" stroke-width="1.4" marker-end="url(#pt2)"/>
+          <line x1="210" y1="188" x2="280" y2="188" stroke="#6b6b6b" stroke-width="1.4" marker-end="url(#pt2)"/>
+
+          <text x="430" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a1a1a">First playable frame ships the LIGHT set only.</text>
+          <text x="430" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a1a1a">Heavier tiers upgrade in <em>after</em> play starts.</text>
+          <text x="430" y="96" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">Low-end phones never download what they can't render.</text>
+        </svg>
+        <figcaption>PerfTier turns "one size fits all" into "small by default, heavy by upgrade" — the safest way to cut initial download without hurting high-end visuals.</figcaption>
+      </figure>
+
+      <p>The key design choice: <strong>the light profile is the default</strong>, not an opt-in. High-end devices opt <em>up</em> after the game is already on screen. That way the bundle size you measure is the size everyone experiences first.</p>
+
+      <h2>7. What I'd do differently</h2>
+      <ol>
+        <li><strong>Measure before building features, not after.</strong> I only ran the audit once the feature set froze. Doing it earlier would have caught the skydome on day one.</li>
+        <li><strong>Bake PerfTier into the architecture from the start.</strong> Retrofitting asset tiers onto a build that assumed one uniform set was more work than designing for it. The engine comparison I wrote in <a href="/articles/cocos-vs-unity-vs-godot.html">Cocos vs Unity vs Godot</a> matters here too — pick a pipeline that makes subpackaging cheap.</li>
+        <li><strong>Automate the dead-resource check.</strong> A CI step that fails the build on unreferenced large assets would have prevented the slow creep.</li>
+      </ol>
+
+      <h2>8. Takeaways</h2>
+      <p>If your mini-game's first load feels sluggish, the fix is almost never "a faster engine" — it's "ship less." Pull the engine out of the critical path, split everything past the first screen into on-demand chunks, audit textures with zero mercy (the skydome goes), sweep dead resources, and add a PerfTier so low-end devices download only what they can render. Together those moves took my initial footprint down by roughly 60%, and the game felt faster on every device — not just the good ones.</p>
+
+      <h2>9. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built a Cocos Creator WeChat Mini-Game — full post-mortem</a></li>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></li>
+        <li><a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
