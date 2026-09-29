@@ -54,6 +54,7 @@ const jobs = [
   { file: 'og-kubi.png', data: { chip: 'INDIE GAME LAB', titleLines: ['How I Built “Super', 'Miserable Adventurer”'], subtitle: 'A Cocos Creator WeChat Mini-Game Case Study' } },
   { file: 'og-engine.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator vs Unity', 'vs Godot'], subtitle: 'Which Engine for a Solo Indie in 2026' } },
   { file: 'og-i18n.png', data: { chip: 'INDIE GAME LAB', titleLines: ['The Complete Guide to', 'i18n in a Cocos Web Game'], subtitle: 'Without a Rewrite — Localization Architecture' } },
+  { file: 'og-loop.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Designing a Satisfying', 'Idle Loop'], subtitle: 'Lessons from Shipping a Survival RPG' } },
 ];
 
 mkdirSync(OUT, { recursive: true });
