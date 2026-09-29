@@ -56,6 +56,8 @@ const jobs = [
   { file: 'og-i18n.png', data: { chip: 'INDIE GAME LAB', titleLines: ['The Complete Guide to', 'i18n in a Cocos Web Game'], subtitle: 'Without a Rewrite — Localization Architecture' } },
   { file: 'og-loop.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Designing a Satisfying', 'Idle Loop'], subtitle: 'Lessons from Shipping a Survival RPG' } },
   { file: 'og-bundle.png', data: { chip: 'INDIE GAME LAB', titleLines: ['How I Cut My Mini-Game', 'Bundle Size 60%'], subtitle: 'Engine Subpackaging + PerfTier — A Cocos Teardown' } },
+  { file: 'og-gear.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Best Mechanical', 'Keyboards 2026'], subtitle: 'For Game Developers — Under $100 / $200' } },
+  { file: 'og-tools.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Top 7 Tools to Ship', 'an Indie Game on a Budget'], subtitle: 'Free & Paid — What I Actually Use in 2026' } },
 ];
 
 mkdirSync(OUT, { recursive: true });
