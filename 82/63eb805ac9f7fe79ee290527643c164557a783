@@ -1,0 +1,26 @@
+.workbuddy/memory/2026-09-29.md
+  s_2421242316b263::t_3dee64e7085d09 113
+  s_2421242316b263::t_ea321c0a3b1723 104-112
+index.html
+  s_2421242316b263::t_5d53876a947470 50-51,54,56,59-61
+  s_2421242316b263::t_d0a7a3107a572f 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "8263eb805ac9f7fe79ee290527643c164557a783",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
