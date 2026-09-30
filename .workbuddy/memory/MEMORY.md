@@ -49,6 +49,7 @@
 - **kubi-minigame（Cocos web）**：`web-extra/about.html`、`privacy.html`（游戏外设键盘/鼠标/耳机 带 tag 链接）、`nav.html`（顶部导航片段）、`inject-nav.ps1`（注入脚本）。`deploy-web.bat` 改：复制 about/privacy 到 gh-pages + powershell 注入顶部导航（防重部署 `git rm -rf` 冲掉 CNAME/导航）。
 - **捐赠入口定为 Ko-fi**（`https://ko-fi.com/haitaopan`，真实 handle；GitHub Sponsors 按钮已删，AffiliateBanner 已改可折叠默认展开）。**Buy Me a Coffee 已试并弃**：BMC 2026 年提现全面 Stripe-only，官方支持国家无中国大陆，钱收了也锁死；勿再推荐。
 - **打赏收款路径（大陆个人实测可行，待老板执行）**：PayPal 中国**个人**账户（勿选商业账户）→ Ko-fi 绑 PayPal → PayPal"关联美国银行账户"填 Payoneer 虚拟账户（~3%，若报"请检查你的信息"是 Citibank 号段被拦，找 Payoneer 客服改发 First Century Bank）→ Payoneer 结汇回国内卡（~1.2%）。
+- **PayPal 绑 Payoneer 残坑（2026-09-30 查证）**：FCB 非 100% 必过。① 新账户常需 **等 5-7 天** PayPal 安全期，先等再判失败；② **绑定时必须关 VPN/代理、用国内 IP**，否则非常用 IP 触发风控；③ 仍被拦→打 PayPal 客服（400-921-1000 / 021-28913888）**人工协助，但绝口不提 Payoneer/P卡/派安盈**（两者竞争关系，一提客服不服务），只说"自己拿到/第三方签发的美国银行账户"；④ 极小概率 FCB 也不行，可让 Payoneer 客服改回 Community Federal Savings Bank 试（现难签发）。姓名顺序（PayPal 姓前 Pan Haitao / Payoneer 名前 Haitao Pan）非卡点，Payoneer 不验账户名。
 - Amazon 链接均为带 `?tag=phtbyte-20` 的搜索页，价格不写死。
 
 ## 用户协作偏好（跨项目）
