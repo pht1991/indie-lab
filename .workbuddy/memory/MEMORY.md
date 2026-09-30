@@ -47,7 +47,9 @@
 - **目的**：两个 GitHub Pages 子站（Cocos 游戏、Three.js 招牌工具）面向海外用户，挂 Amazon US 联盟（`phtbyte-20`）+ Ko-fi / GitHub Sponsors 捐赠。观众是海外英文用户 → US 联盟对口，搜索页带 tag 链接可赚（24h cookie 内整单计佣）。
 - **sign-renderer（Vite+React）**：新增 `src/AffiliateBanner.tsx`（底部横幅：3D打印机/4K显示器/绘图板 带 tag 搜索链接 + Ko-fi/Sponsors + FTC 行）、`public/about.html`、`public/privacy.html`（英文，填 AdSense thin-content 拒批坑）。App.tsx 引入横幅 + 顶部 About/Privacy 导航。
 - **kubi-minigame（Cocos web）**：`web-extra/about.html`、`privacy.html`（游戏外设键盘/鼠标/耳机 带 tag 链接）、`nav.html`（顶部导航片段）、`inject-nav.ps1`（注入脚本）。`deploy-web.bat` 改：复制 about/privacy 到 gh-pages + powershell 注入顶部导航（防重部署 `git rm -rf` 冲掉 CNAME/导航）。
-- **待用户替换**：Ko-fi 链接现用占位 `https://ko-fi.com/phtbyte`，上线前换成真实 handle；GitHub Sponsors 用 `https://github.com/sponsors/pht1991`。Amazon 链接均为带 `?tag=phtbyte-20` 的搜索页，价格不写死。
+- **捐赠入口定为 Ko-fi**（`https://ko-fi.com/haitaopan`，真实 handle；GitHub Sponsors 按钮已删，AffiliateBanner 已改可折叠默认展开）。**Buy Me a Coffee 已试并弃**：BMC 2026 年提现全面 Stripe-only，官方支持国家无中国大陆，钱收了也锁死；勿再推荐。
+- **打赏收款路径（大陆个人实测可行，待老板执行）**：PayPal 中国**个人**账户（勿选商业账户）→ Ko-fi 绑 PayPal → PayPal"关联美国银行账户"填 Payoneer 虚拟账户（~3%，若报"请检查你的信息"是 Citibank 号段被拦，找 Payoneer 客服改发 First Century Bank）→ Payoneer 结汇回国内卡（~1.2%）。
+- Amazon 链接均为带 `?tag=phtbyte-20` 的搜索页，价格不写死。
 
 ## 用户协作偏好（跨项目）
 - **不自动 git commit/push**：改动留本地，用户自己 review 后提交推送（用户显式要求时例外）。
