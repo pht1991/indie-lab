@@ -32,7 +32,7 @@
 - **首页列表排序铁律（2026-09-29 定）**：**权威优先，非时间优先**。技术文（蓝海案例/拆解/教程）占前排立 EEAT；变现/购买指南文（#6 键盘、#7 工具）**一律垫底**（仍在首页+靠技术文内链导流，转化更高）；红海漏斗文（#8 indie games）插在权威文与变现文之间（漏斗引流，非变现，不放垫底）。当前顺序：kubi→引擎对比(#2)→包体(#5)→idle(#4)→i18n(#3)→indie games(#8)→工具(#7)→键盘(#6)。section 标题已从 `Latest Field Notes` 改为 `Field Notes`（避免"最新在上"预期）。新文按此规则插位，**不要按发布时间把变现文顶到前排**。
 - **署名**：作者统一 **Haitao Pan**（与税务/Payoneer 一致，EEAT）。
 
-## 已产内容（截至 2026-09-29，共 8 篇，#8 待用户 git push；#1~#7 已推）
+## 已产内容（截至 2026-09-30，共 9 篇，全部待用户 git push；#1~#7 已推、#8/#9 本地新产）
 1. `how-i-built-kubi.html` — kubi 案例（Cocos 3.8 微信小游戏架构/UI 网格/性能）
 2. `cocos-vs-unity-vs-godot.html` — 引擎选型（首篇带 Amazon 书单联盟）
 3. `cocos-web-game-i18n-guide.html` — i18n 完整指南（长尾）
@@ -41,7 +41,9 @@
 6. `best-mechanical-keyboards.html` — 机械键盘（**首篇真带 Amazon 实物联盟 gear 利润锚**，FTC+5 链接 phtbyte-20）
 7. `indie-tools-2026.html` — 工具清单（蓝海，首篇 SaaS 联盟锚；PartnerStack/Awin 未注册，链接暂用官网直链 + FTC 标注"接入后回填"，非负 Amazon、无 tag=phtbyte-20）
 8. `indie-games-2026.html` — 《7 Indie Games You Missed in 2026 (and What Devs Can Learn)》（**红海流量漏斗文**，无联盟，游戏名链接指向 Steam 搜索页非联盟；内链回 #2/#4/#5/#1 四篇蓝海，2 张 SVG：四课框架 + 漏斗路由图）
-- **下一篇 #9**：蓝海长尾技术文（建议 Cocos 专项教程，或人设文补足 8 蓝+1 红+1 人设配比）。
+9. `cocos-draw-call-optimization.html` — 《Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices》（**蓝海运行时性能教程**，无联盟；atlas 批渲染 + 过绘(skydome) + GridCell 由 prefab 改代码构造降节点数；2 张 SVG：合图批渲染前后 / 帧时间预算条；内链 #5/#1/#2/#4）
+- **红蓝海配比现状（2026-09-30）**：蓝 ~7（#1#2#3#4#5#7#9）/ 红 1（#8）/ 人设 0 / 变现垫底 #6。距目标 8蓝+1红+1人设 还差：**+1 蓝 或 +1 人设**。
+- **下一篇 #10 建议**：补 1 篇**人设文**（凑齐 8蓝+1红+1人设，且强化 EEAT 个人品牌），或再补 1 篇蓝海 Cocos 教程（达 8 蓝）。
 
 ## 子站变现接线（kubi.phtbyte.com / sign.phtbyte.com，2026-09-29 加）
 - **目的**：两个 GitHub Pages 子站（Cocos 游戏、Three.js 招牌工具）面向海外用户，挂 Amazon US 联盟（`phtbyte-20`）+ Ko-fi / GitHub Sponsors 捐赠。观众是海外英文用户 → US 联盟对口，搜索页带 tag 链接可赚（24h cookie 内整单计佣）。

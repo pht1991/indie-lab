@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocos Creator 3.8 Draw Call Optimization</title>
+  <meta name="description" content="A runtime performance teardown from a shipped Cocos Creator 3.8 mini-game: how atlas batching, overdraw control, and code-built UI grids cut frame time on real low-end phones." />
+  <link rel="canonical" href="https://phtbyte.com/articles/cocos-draw-call-optimization.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices" />
+  <meta property="og:description" content="Atlas batching, overdraw control, and code-built UI grids — a runtime perf teardown from a real Cocos mini-game." />
+  <meta property="og:url" content="https://phtbyte.com/articles/cocos-draw-call-optimization.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-drawcall.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Cocos Creator 3.8 draw call optimization — batching and frame-time teardown" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-drawcall.png" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices",
+    "description": "Atlas batching, overdraw control, and code-built UI grids — a runtime perf teardown from a real Cocos mini-game.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-09-30",
+    "dateModified": "2026-09-30",
+    "mainEntityOfPage": "https://phtbyte.com/articles/cocos-draw-call-optimization.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 11 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> Download size is only half the battle — the other half is what happens <em>every frame</em>. I shipped a 750×1334 portrait mini-game on Cocos Creator 3.8 and learned the hard way that low-end phones don't choke on your bundle, they choke on your <strong>draw calls</strong>. Three moves did most of the work: atlas batching (one draw call per atlas instead of per sprite), killing overdraw (the same skydome that fattened my bundle also wrecked my fill rate), and building the UI grid in code with a shared material instead of instantiating hundreds of prefab nodes. Here's the runtime teardown.</p>
+
+      <p>This is the same project I wrote up in my <a href="/articles/how-i-built-kubi.html">Cocos Creator mini-game post-mortem</a> and my <a href="/articles/bundle-size-optimization.html">bundle-size teardown</a>. The bundle article is about what you ship; this one is about what you <em>render</em>. Different budget, same lesson: measure, then cut.</p>
+
+      <h2>1. Why draw calls matter more than you think on mobile</h2>
+      <p>A draw call is one command to the GPU to draw a batch of geometry with one material. The GPU itself is rarely the bottleneck on a phone — the <em>CPU-to-GPU handoff</em> is. Every time the renderer has to switch material, texture, or blend state, it closes one batch and opens another. A screen with 200 separate sprites and 200 material/texture states can issue 200 draw calls, and on a mid-range Android SoC that alone can eat your entire 16&nbsp;ms frame budget before your game logic runs a line.</p>
+
+      <p>The trap: in the editor on a decent laptop it all runs at 60fps and you never notice. The player on a three-year-old phone sees 22fps and bounces. So I treat draw-call count as a first-class metric, right next to bundle size — not something I check "if it feels slow."</p>
+
+      <h2>2. The one rule that fixes most of it: atlas + batching</h2>
+      <p>Cocos can batch sprites that share a material <em>and</em> a texture atlas into a single draw call. The catch is that "share" is strict: two sprites on different atlases, or with different materials, break the batch and each becomes its own draw call. So the work is mostly hygiene:</p>
+
+      <ul>
+        <li><strong>Pack related sprites into one atlas.</strong> UI icons, tile sets, and character frames that appear together on screen belong in the same sheet.</li>
+        <li><strong>Reuse one material.</strong> A custom material per sprite (tint, shader variant) silently breaks batching. Keep the default sprite material unless you have a reason not to.</li>
+        <li><strong>Watch label rendering.</strong> Text is its own can of worms — each label with a different string or style can spawn draw calls. Cache and reuse label nodes instead of spawning fresh ones per frame.</li>
+      </ul>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six sprites on two atlases drawn as six draw calls before, versus two draw calls after atlas batching">
+          <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Before: 6 sprites, 6 draw calls</text>
+          <!-- unbatched: 3 red + 3 blue representing two atlases interleaved -->
+          <rect x="20" y="44" width="44" height="40" rx="6" fill="#fdeaea" stroke="#e05656"/>
+          <rect x="74" y="44" width="44" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0"/>
+          <rect x="128" y="44" width="44" height="40" rx="6" fill="#fdeaea" stroke="#e05656"/>
+          <rect x="182" y="44" width="44" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0"/>
+          <rect x="236" y="44" width="44" height="40" rx="6" fill="#fdeaea" stroke="#e05656"/>
+          <rect x="290" y="44" width="44" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0"/>
+          <text x="20" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Interleaved atlases force a state switch every sprite.</text>
+
+          <rect x="20" y="150" width="314" height="58" rx="10" fill="#eaf7ee" stroke="#27ae60" stroke-width="2"/>
+          <text x="177" y="174" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a7a3c">Grouped by atlas → 1 draw call each</text>
+          <text x="177" y="196" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">Atlas A (red) + Atlas B (blue) = 2 draw calls</text>
+
+          <line x1="346" y1="80" x2="430" y2="80" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#dc)"/>
+          <text x="440" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">After: 2 draw calls</text>
+          <!-- after: two grouped blocks -->
+          <rect x="440" y="54" width="100" height="40" rx="6" fill="#fdeaea" stroke="#e05656"/>
+          <rect x="440" y="54" width="100" height="40" rx="6" fill="#fdeaea" stroke="#e05656" opacity="0.55"/>
+          <rect x="440" y="54" width="100" height="40" rx="6" fill="#fdeaea" stroke="#e05656" opacity="0.35"/>
+          <text x="490" y="118" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Atlas A ×3 → 1 call</text>
+          <rect x="560" y="54" width="100" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0"/>
+          <rect x="560" y="54" width="100" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0" opacity="0.55"/>
+          <rect x="560" y="54" width="100" height="40" rx="6" fill="#eaf1ff" stroke="#2f6df0" opacity="0.35"/>
+          <text x="610" y="118" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Atlas B ×3 → 1 call</text>
+          <defs>
+            <marker id="dc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>Same six sprites, 3× fewer draw calls — just by grouping them by atlas instead of letting the renderer switch state per sprite.</figcaption>
+      </figure>
+
+      <h2>3. Overdraw: the skydome that also killed my fill rate</h2>
+      <p>Remember the 3D skydome I deleted in the <a href="/articles/bundle-size-optimization.html">bundle-size teardown</a>? It was a double offender. It cost download size <em>and</em> it was a full-screen mesh drawn behind everything, forcing the GPU to shade every pixel twice — once for the skydome, once for whatever was in front. On a low-resolution canvas that's wasted fill rate; on a high-DPI phone it's a straight tax on frame time.</p>
+
+      <p>The fix for overdraw is the same instinct as for bundle size: if the player can't name it, it shouldn't cost you pixels. Flat gradient backdrop, no full-screen transparent layers stacked on top of each other, and no large semi-transparent UI panels overlapping the game view. Every transparent layer you stack is another pass over the whole screen.</p>
+
+      <h2>4. UI grids: why I stopped using prefabs for cells</h2>
+      <p>This is the one that surprised me. My game has a grid inventory — dozens of cells on screen at once. My first version instantiated each cell as a prefab node. Cocos is good at this, but every cell carried its own node, its own transform update, and — worse — its own draw setup. With a 10×10 grid that's 100 nodes, each potentially a separate draw call if their materials drifted apart.</p>
+
+      <p>The rebuild: I construct the grid in code and give every cell the <strong>same shared material and atlas</strong>. Instead of 100 near-identical nodes fighting the batcher, the grid collapses into a handful of draw calls. The cells are data + one render path, not 100 prefab instances. The inspiration came straight from the performance budget I set in the <a href="/articles/how-i-built-kubi.html">kubi case study</a> — when node count is a budget line, you stop reaching for prefabs by default.</p>
+
+      <p>The lesson transfers beyond grids: any time you're about to instantiate N similar visual elements, ask whether they can share one material and one atlas. Shared state is batched state.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Frame-time budget before and after: 33ms under 30fps shrinks to 15ms at 60fps as draw-call and overdraw segments shrink">
+          <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Frame-time budget (ms per frame)</text>
+
+          <!-- BEFORE bar -->
+          <text x="20" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Before — 33ms (~28 fps)</text>
+          <rect x="20" y="66" width="468" height="34" rx="6" fill="#fbe3e3" stroke="#e05656"/>
+          <rect x="20" y="66" width="220" height="34" rx="6" fill="#e05656"/>
+          <text x="32" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff">Draw calls · 15.5</text>
+          <rect x="244" y="66" width="120" height="34" fill="#e0a020"/>
+          <text x="252" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">Overdraw · 8.5</text>
+          <rect x="368" y="66" width="120" height="34" fill="#2f6df0"/>
+          <text x="376" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff">Script · 9</text>
+
+          <!-- AFTER bar -->
+          <text x="20" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">After — 15ms (60 fps, headroom to spare)</text>
+          <rect x="20" y="146" width="468" height="34" rx="6" fill="#e6f6ec" stroke="#27ae60"/>
+          <rect x="20" y="146" width="100" height="34" rx="6" fill="#27ae60"/>
+          <text x="32" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff">Draw · 4</text>
+          <rect x="124" y="146" width="50" height="34" fill="#e0a020"/>
+          <text x="132" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">O · 2</text>
+          <rect x="178" y="146" width="60" height="34" fill="#2f6df0"/>
+          <text x="186" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#fff">S · 4</text>
+          <rect x="242" y="146" width="246" height="34" rx="6" fill="#fbfbfa" stroke="#cfd8e3" stroke-dasharray="4 4"/>
+          <text x="365" y="168" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#5b6573">freed headroom (~10ms)</text>
+
+          <text x="20" y="218" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#1a1a1a">Draw-call + overdraw were ~70% of the frame. Batching the grid and</text>
+          <text x="20" y="238" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#1a1a1a">killing the full-screen skydome reclaimed almost all of it.</text>
+        </svg>
+        <figcaption>Directional numbers from my device tests — your split will differ, but the shape holds: draw calls and overdraw dominate the frame.</figcaption>
+      </figure>
+
+      <h2>5. What I'd measure first next time</h2>
+      <ol>
+        <li><strong>Turn on the profiler on a real device, not the editor.</strong> The editor hides the exact problem you're solving. A $100 used Android phone is the most honest perf review you'll ever get.</li>
+        <li><strong>Read the draw-call count before touching code.</strong> If it's in the hundreds on your main screen, batching hygiene is your fastest win — bigger than any clever shader.</li>
+        <li><strong>Count nodes, not just sprites.</strong> Prefab sprawl shows up as both node updates and broken batches. The <a href="/articles/idle-loop-design.html">idle-loop discipline</a> of cutting systems applies to your scene graph too: fewer nodes, fewer surprises.</li>
+        <li><strong>Budget overdraw like memory.</strong> Every full-screen or stacked-transparent layer is a line item. Audit them the same way you audit textures.</li>
+      </ol>
+
+      <h2>6. Takeaways</h2>
+      <p>If your mini-game runs fine on your laptop but stutters on real phones, don't reach for a "faster engine" — reach for the draw-call count. Pack sprites into shared atlases and reuse one material so the renderer can batch; kill full-screen and stacked-transparent layers that waste fill rate; and when you're spawning many similar elements, build them in code with a shared material instead of instantiating prefab nodes. Those three moves took my main screen from a ~28fps slog to a comfortable 60 with headroom to spare. Download size gets the headlines; frame time gets the players to stay.</p>
+
+      <h2>7. Related reads</h2>
+      <ul>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a> — the download-side half of this perf story.</li>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer" — A Cocos Creator WeChat Mini-Game Case Study</a> — where the node-count budget came from.</li>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a> — picking a pipeline where batching is cheap.</li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>

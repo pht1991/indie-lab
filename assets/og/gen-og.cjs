@@ -59,6 +59,7 @@ const jobs = [
   { file: 'og-gear.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Best Mechanical', 'Keyboards 2026'], subtitle: 'For Game Developers — Under $100 / $200' } },
   { file: 'og-tools.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Top 7 Tools to Ship', 'an Indie Game on a Budget'], subtitle: 'Free & Paid — What I Actually Use in 2026' } },
   { file: 'og-funnel.png', data: { chip: 'INDIE GAME LAB', titleLines: ['7 Indie Games You', 'Missed in 2026'], subtitle: 'and What Devs Can Learn — A Developer Lens' } },
+  { file: 'og-drawcall.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator 3.8', 'Draw Call Optimization'], subtitle: 'Cutting Frame Time on Real Devices — A Runtime Teardown' } },
 ];
 
 mkdirSync(OUT, { recursive: true });
