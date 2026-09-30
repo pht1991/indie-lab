@@ -1,0 +1,3 @@
+# WorkBuddy project working dir (local memory, helper scripts, drafts)
+# Per project convention: .workbuddy/ must stay local and never be committed.
+.workbuddy/
