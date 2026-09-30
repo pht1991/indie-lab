@@ -1,0 +1,14 @@
+index.html
+  h_70068c5a17f62a 127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "b7a8c85596d340fd34db7c6747218f291ee3c9b2",
+  "prompts": {},
+  "humans": {
+    "h_70068c5a17f62a": {
+      "author": "panhaitao-9ap2u <panhaitao@sdpjw.com>"
+    }
+  }
+}
