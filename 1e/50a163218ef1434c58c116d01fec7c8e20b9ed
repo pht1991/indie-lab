@@ -1,0 +1,34 @@
+.workbuddy/memory/MEMORY.md
+  s_2421242316b263::t_5ef4f393c83ab4 35,44-46
+articles/cocos-draw-call-optimization.html
+  s_2421242316b263::t_4f4d038bd2214a 1-180
+.workbuddy/memory/2026-09-30.md
+  s_2421242316b263::t_fd4c5d4563d8db 11-16
+assets/og/gen-og.cjs
+  s_2421242316b263::t_408a4d08ad294e 62
+index.html
+  s_2421242316b263::t_f19a037db3d11e 100
+  s_2421242316b263::t_d7e5c59722d957 85-88
+  s_2421242316b263::t_5fc53366471128 84
+sitemap.xml
+  s_2421242316b263::t_9b8826ee8aa92d 48-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "1e50a163218ef1434c58c116d01fec7c8e20b9ed",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
