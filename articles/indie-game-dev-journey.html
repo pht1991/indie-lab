@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Indie Game Dev Journey: Lessons From Shipping KuBi</title>
+  <meta name="description" content="Who I am and why this site exists: a studio owner and working developer on building original mini-games in Cocos Creator 3.8, the constraints that shaped them, and why I write the post-mortems down in public." />
+  <link rel="canonical" href="https://phtbyte.com/articles/indie-game-dev-journey.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="My Indie Game Dev Journey: Lessons From Shipping KuBi" />
+  <meta property="og:description" content="Who I am and why I write these post-mortems: a studio owner's path from web dev to shipping original Cocos Creator mini-games, and going global with an English content site." />
+  <meta property="og:url" content="https://phtbyte.com/articles/indie-game-dev-journey.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-journey.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="My indie game dev journey — from web dev to shipping KuBi and writing it down" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-journey.png" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "My Indie Game Dev Journey: Lessons From Shipping KuBi",
+    "description": "Who I am and why I write these post-mortems: a studio owner's path from web dev to shipping original Cocos Creator mini-games, and going global with an English content site.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-09-30",
+    "dateModified": "2026-09-30",
+    "mainEntityOfPage": "https://phtbyte.com/articles/indie-game-dev-journey.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>My Indie Game Dev Journey: Lessons From Shipping KuBi</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 9 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> I'm a studio owner and working developer based in Hangzhou. I build original mini-games — most recently <em>"Super Miserable Adventurer" (KuBi)</em>, a survival/crafting game on Cocos Creator 3.8 for the WeChat platform — and I started Indie Game Lab to write down exactly how the builds actually went. Not "how to make a game" theory, but the real constraints, the dead ends, and the rebuilds. This is the story behind the posts.</p>
+
+      <h2>1. Where I started</h2>
+      <p>I came up through web and front-end development, where the feedback loop is short: change a line, refresh, see the result. Games looked like the opposite end of the spectrum — long production cycles, huge teams, and a lot of talk about "vision." What pulled me in was realizing that a small, focused game is actually closer to a web app than to a AAA studio: one person can own the loop, the build, and the ship.</p>
+
+      <p>The decision that shaped everything was to build original games rather than contract work. Original means I make the calls on scope, art, and monetization myself — which also means I eat the consequences of every call. That's the part most "how to make a game" content skips, and it's the part I find worth writing about.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Journey: web/front-end dev to learning Cocos, shipping KuBi on WeChat, then going global with an English content site and two sub-projects">
+          <defs>
+            <marker id="jr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- nodes -->
+          <rect x="10" y="80" width="140" height="64" rx="12" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="80" y="108" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Web &amp; front-end</text>
+          <text x="80" y="128" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">short feedback loop</text>
+
+          <rect x="190" y="80" width="140" height="64" rx="12" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="260" y="108" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Learn Cocos 3.8</text>
+          <text x="260" y="128" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">TS, small runtime</text>
+
+          <rect x="370" y="80" width="140" height="64" rx="12" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="440" y="108" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a7a3c">Ship KuBi</text>
+          <text x="440" y="128" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">WeChat mini-game</text>
+
+          <rect x="550" y="80" width="120" height="64" rx="12" fill="#fff6e6" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="610" y="108" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#a06a00">Go global</text>
+          <text x="610" y="128" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">EN site + 2 subs</text>
+
+          <line x1="150" y1="112" x2="184" y2="112" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#jr)"/>
+          <line x1="330" y1="112" x2="364" y2="112" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#jr)"/>
+          <line x1="510" y1="112" x2="544" y2="112" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#jr)"/>
+          <text x="340" y="190" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Same person owns the loop, the build, and the ship at every step.</text>
+        </svg>
+        <figcaption>The through-line: I never stopped being the one who makes the calls. The platform changed; the ownership didn't.</figcaption>
+      </figure>
+
+      <h2>2. Building KuBi under real constraints</h2>
+      <p>The game is a 750×1334 portrait survival/crafting loop — gather, craft, fight, dive dungeons. The interesting part wasn't the design, it was the <em>ceiling</em>. WeChat's mini-game runtime is unforgiving about package size, and low-end phones are unforgiving about frame time. Those two constraints drove almost every technical decision, and they're the reason this site has a whole cluster of teardown posts:</p>
+      <ul>
+        <li><strong>Package size.</strong> Engine subpackaging and a ruthless texture audit — yes, the skydome got deleted — got the first-load bundle down hard. Written up in <a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a>.</li>
+        <li><strong>Frame time.</strong> Low-end phones don't choke on your bundle, they choke on draw calls. Atlas batching and code-built UI grids fixed most of it. That's <a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization</a>.</li>
+        <li><strong>i18n.</strong> A Chinese-only build isn't portable. One localization layer and CJK-aware text metrics made it multilingual without a rewrite — <a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game</a>.</li>
+        <li><strong>The case study.</strong> The full post-mortem, including the UI grid architecture and what I'd do differently, is in <a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer"</a>.</li>
+      </ul>
+
+      <p>The through-line across all of those: <strong>measure before you optimize, and optimize the package before the frame rate</strong> — size blocks the install, frame rate only blocks retention. I learned that the expensive way.</p>
+
+      <h2>3. What shipping taught me</h2>
+      <p>A few lessons that didn't fit neatly into a technical post but shaped how I work now:</p>
+      <ul>
+        <li><strong>Scope is a moral decision, not a planning one.</strong> Every feature you keep is a promise to maintain. I cut systems (a whole trade layer, a shallow second loop) not because they were bad, but because keeping them would have delayed the ship past the point of caring.</li>
+        <li><strong>The editor lies.</strong> A $100 used Android phone is the most honest performance review you'll ever get. I now profile on-device by default, not as a cleanup step.</li>
+        <li><strong>Retention deserves a dashboard before polish does.</strong> I had a perf dashboard before I had a retention dashboard. Inverted priority — fun is the product, frames are just the delivery truck.</li>
+        <li><strong>Original beats safe.</strong> Contract work pays; original work teaches. The rebuilds hurt, but the lessons from shipping something <em>mine</em> are the ones that stuck.</li>
+      </ul>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three work streams — ship games, document publicly, build tools — converging on the reader/community">
+          <!-- three source streams -->
+          <rect x="20" y="30" width="180" height="56" rx="12" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="110" y="54" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Ship games</text>
+          <text x="110" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">KuBi · Cocos 3.8</text>
+
+          <rect x="250" y="30" width="180" height="56" rx="12" fill="#fff6e6" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="340" y="54" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#a06a00">Write it down</text>
+          <text x="340" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">post-mortems, public</text>
+
+          <rect x="480" y="30" width="180" height="56" rx="12" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="570" y="54" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a7a3c">Build tools</text>
+          <text x="570" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Sign Renderer · 3D</text>
+
+          <!-- converging arrows -->
+          <line x1="110" y1="86" x2="320" y2="156" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#ws)"/>
+          <line x1="340" y1="86" x2="340" y2="156" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#ws)"/>
+          <line x1="570" y1="86" x2="360" y2="156" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#ws)"/>
+
+          <!-- output -->
+          <rect x="200" y="160" width="280" height="60" rx="14" fill="#1a1a1a"/>
+          <text x="340" y="186" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#f4f7fb">Indie Game Lab</text>
+          <text x="340" y="208" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9aa6b8">real builds → real lessons for other devs</text>
+          <defs>
+            <marker id="ws" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>How I actually spend the week: shipping, documenting, and tooling all feed the same output. The writing isn't a side project — it's the part that compounds.</figcaption>
+      </figure>
+
+      <h2>4. Why I write it down in public</h2>
+      <p>Most game-dev content online is either conference talks paraphrased into a blog, or "I made $X in 30 days" growth porn. Neither helped me when a build failed at 2am because the engine subpackage didn't load. So I write the opposite: the specific, the unglamorous, the "here's the number I measured." If a post doesn't contain a real figure or a real mistake, it doesn't ship here.</p>
+
+      <p>Writing it publicly also forces honesty. A private note can hand-wave; a published teardown gets read by people who've hit the same wall, and they'll tell you where you're wrong. That feedback loop is worth more than any tutorial I've followed.</p>
+
+      <h2>5. What's next</h2>
+      <p>The next move is <strong>going global</strong>. The games and the writing are increasingly in English, aimed at overseas developers who face the same constraints I do. Two sub-projects are already live under the same domain:</p>
+      <ul>
+        <li><strong>kubi.phtbyte.com</strong> — the playable browser build of KuBi, same survival/crafting loop with no app store in the way.</li>
+        <li><strong>sign.phtbyte.com</strong> — a Three.js tool that turns a storefront photo into a layered 3D sign mockup, built to make client previews faster.</li>
+      </ul>
+
+      <p>And the content keeps coming — more Cocos runtime teardowns, more scope/retention lessons, and the occasional honest roundup of games worth studying. If you build games (or want to), the best place to start is the post-mortem of the game that started this site: <a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer"</a>. After that, the <a href="/articles/cocos-vs-unity-vs-godot.html">engine comparison</a> explains why Cocos was the call, and the <a href="/articles/idle-loop-design.html">idle-loop piece</a> covers the design side that the tech posts don't.</p>
+
+      <h2>6. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer" — A Cocos Creator WeChat Mini-Game Case Study</a> — the game this whole site grew out of.</li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a> — the package-size half of the constraint story.</li>
+        <li><a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices</a> — the frame-time half.</li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
