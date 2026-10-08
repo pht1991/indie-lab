@@ -30,6 +30,11 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+.faq { margin: 0 0 1.5rem; }
+.faq dt { font-weight: 700; margin-top: 1.25rem; color: var(--text); }
+.faq dt:first-child { margin-top: 0; }
+.faq dd { margin: 0.35rem 0 0; color: #444; }
+
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
 
 header.site {

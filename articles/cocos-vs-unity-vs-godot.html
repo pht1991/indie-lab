@@ -28,8 +28,40 @@
     "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
     "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
     "datePublished": "2026-09-28",
-    "dateModified": "2026-09-28",
+    "dateModified": "2026-10-08",
     "mainEntityOfPage": "https://phtbyte.com/articles/cocos-vs-unity-vs-godot.html"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Godot or Cocos better for a solo indie in 2026?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both are free and light, so the decider is your distribution channel. Pick Cocos Creator if your first target is a WeChat or HTML5 mini-game — its native build pipeline and tiny first-load package are unmatched there. Pick Godot 4.x if you're shipping a Steam or itch.io 2D game you want to own completely, with MIT licensing and no platform lock-in."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Unity vs Godot — which should I pick for 2D?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For a solo 2D project in 2026, Godot is the lower-friction choice: free, MIT-licensed, and lightweight with no runtime-fee risk. Choose Unity when you need its 3D tooling depth or plan to hire C# contractors — its Asset Store and talent pool are still the pragmatic default."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Cocos Creator best at compared to Unity and Godot?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cocos Creator 3.8 wins on first-load package size and native WeChat / web mini-game targets, with first-class TypeScript. It's the right call when a hard runtime size ceiling or a mini-game distribution channel matters more than a large off-the-shelf asset ecosystem."
+        }
+      }
+    ]
   }
   </script>
 </head>
@@ -109,6 +141,18 @@
         </svg>
         <figcaption>Not benchmarks — the shape of the problem. On a size-capped runtime, the bar length is the whole argument.</figcaption>
       </figure>
+
+      <h2>Godot vs Cocos, and Unity vs Godot: the head-to-head</h2>
+      <p>The table above is the 30-second version. The queries that actually bring people here are the one-on-one matchups, so here's the direct breakdown of the three pairings searchers ask about most.</p>
+
+      <h3>Godot vs Cocos Creator</h3>
+      <p>For a solo dev building 2D, this is the closest race on the board. Both are free, both are light, and both get out of your way. The decider is the <strong>distribution channel</strong>: if your first target is a WeChat or HTML5 mini-game, Cocos wins outright — its build pipeline targets those runtimes natively and the first-load package stays tiny. If you're shipping a Steam or itch.io 2D game you want to own end-to-end with zero platform lock-in, Godot's MIT license and clean editor make it the more pleasant daily driver. I went Cocos because my game <em>is</em> a WeChat mini-game; on a different game I'd have gone Godot without a second thought.</p>
+
+      <h3>Cocos Creator vs Godot: 3D and the version line</h3>
+      <p>Neither is Unity in 3D, but the gap differs. Cocos Creator 3.8 handles moderate 3D (my mini-game runs a simple 3D skybox and it's perfectly fine), while Godot 4.x's 3D improved a lot but still lags for ambitious scenes. If 3D is more than ~20% of your game, both start to strain and Unity enters the conversation. Watch the version line too: the market is already searching for <strong>Cocos Creator 4</strong>, and the web/TypeScript story only gets better with each release — worth tracking before you commit to a version.</p>
+
+      <h3>Unity vs Godot</h3>
+      <p>The classic indie tug-of-war. Unity still wins on 3D breadth, the Asset Store, and hiring; Godot wins on being free, MIT, and lightweight with no pricing surprises. For a solo 2D project in 2026, Godot is the lower-friction choice and Unity's runtime-fee history makes the "free until they change their mind" risk real. Choose Unity when you need its 3D tooling or plan to bring on C# contractors.</p>
 
       <h2>4. A decision framework, not a verdict</h2>
       <p>Run your project through these four filters in order — the first one that bites usually decides:</p>
@@ -194,9 +238,22 @@
       </ul>
       <p><em>*Affiliate links: if you buy through them, I may earn a commission at no extra cost to you.</em></p>
 
+      <h2>Frequently asked questions</h2>
+      <dl class="faq">
+        <dt>Is Godot or Cocos better for a solo indie in 2026?</dt>
+        <dd>Both are free and light, so the decider is your distribution channel. Pick Cocos Creator if your first target is a WeChat or HTML5 mini-game — its native build pipeline and tiny first-load package are unmatched there. Pick Godot 4.x if you're shipping a Steam or itch.io 2D game you want to own completely, with MIT licensing and no platform lock-in.</dd>
+
+        <dt>Unity vs Godot — which should I pick for 2D?</dt>
+        <dd>For a solo 2D project in 2026, Godot is the lower-friction choice: free, MIT-licensed, and lightweight with no runtime-fee risk. Choose Unity when you need its 3D tooling depth or plan to hire C# contractors — its Asset Store and talent pool are still the pragmatic default.</dd>
+
+        <dt>What is Cocos Creator best at compared to Unity and Godot?</dt>
+        <dd>Cocos Creator 3.8 wins on first-load package size and native WeChat / web mini-game targets, with first-class TypeScript. It's the right call when a hard runtime size ceiling or a mini-game distribution channel matters more than a large off-the-shelf asset ecosystem.</dd>
+      </dl>
+
       <h2>8. Related reads</h2>
       <ul>
         <li><a href="/articles/how-i-built-kubi.html">How I Built a Cocos Creator WeChat Mini-Game — full post-mortem</a></li>
+        <li><a href="/articles/bundle-size-optimization.html">Bundle Size Optimization: How I Cut a Cocos Build by 60%</a></li>
       </ul>
 
       <p><a href="/">← Back to all field notes</a></p>
