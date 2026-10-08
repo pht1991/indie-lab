@@ -1,0 +1,35 @@
+sitemap.xml
+  s_2421242316b263::t_5ca89708ccc5fc 58-62
+articles/cocos-creator-beginner-guide.html
+  s_2421242316b263::t_018dae6ea20b20 1-223
+articles/how-i-built-kubi.html
+  s_2421242316b263::t_c7b0a6f820a36d 153
+  s_2421242316b263::t_48ed5ff2df60c6 62
+  s_2421242316b263::t_c2b377e1c4bcab 139
+  s_2421242316b263::t_dcdcdc12d3e8b8 165-172
+  s_2421242316b263::t_f7ae7fc940964f 108
+index.html
+  s_2421242316b263::t_44f5020a2d4c2c 87-90
+  s_2421242316b263::t_4bef54b9ab7806 86
+assets/og/gen-og.cjs
+  s_2421242316b263::t_7ff29daf43b769 64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "7210075dacb9cde05b967beef1f0a9132acc8e40",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
