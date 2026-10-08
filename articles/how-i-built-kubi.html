@@ -59,7 +59,7 @@
       </div>
 
       <h2>1. Why this game, why this engine</h2>
-      <p>I wanted a game with a real progression loop — gather, craft, fight, dive dungeons — that still loads fast on a phone. WeChat's mini-game runtime is unforgiving about package size, so the engine choice was less "what's most powerful" and more "what fits the constraint." Cocos Creator 3.8 LTS won on three points: small runtime, real TypeScript support, and a build pipeline that targets WeChat directly.</p>
+      <p>I wanted a game with a real progression loop — gather, craft, fight, dive dungeons — that still loads fast on a phone. WeChat's mini-game runtime is unforgiving about package size, so the engine choice was less "what's most powerful" and more "what fits the constraint." Cocos Creator 3.8 LTS won on three points: small runtime, real TypeScript support, and a build pipeline that targets WeChat directly. For the full solo-indie engine call — Cocos vs Unity vs Godot — I wrote a longer <a href="/articles/cocos-vs-unity-vs-godot.html">engine comparison breakdown</a>.</p>
 
       <p>I'm the one making the design calls, so the loop was built around a simple promise to the player: <em>every session should move a number that matters.</em> That single rule drove most of the UI decisions below.</p>
 
@@ -105,7 +105,7 @@
         <li><strong>Reuse.</strong> The same grid component drives the home page, the map, and the inventory — one positioning algorithm, three surfaces.</li>
       </ul>
 
-      <p>The grid is a streaming layout: content height is computed from the row flow, the scroll view's viewport is fixed (not driven by a Widget, which fought <code>scrollToTop</code>), and each cell positions itself relative to <code>contentHeight/2</code>. That one detail killed a week of "scroll lands in the wrong place" bugs.</p>
+      <p>The grid is a streaming layout: content height is computed from the row flow, the scroll view's viewport is fixed (not driven by a Widget, which fought <code>scrollToTop</code>), and each cell positions itself relative to <code>contentHeight/2</code>. That one detail killed a week of "scroll lands in the wrong place" bugs. The same code-built-grid idea, pushed to cutting draw calls on real devices, is in my <a href="/articles/cocos-draw-call-optimization.html">Cocos draw-call optimization write-up</a>.</p>
 
       <figure class="diagram">
         <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Widget library layers: game panels on top, layout components in the middle, primitives below, Cocos runtime at the base">
@@ -136,7 +136,7 @@
       <p>Mini-game runtimes punish sloppiness. Three fixes moved the needle most:</p>
       <ul>
         <li><strong>Skybox cleanup.</strong> An unused 3D backdrop was eating draw calls for nothing. Gone.</li>
-        <li><strong>Engine subpackage.</strong> Splitting the engine out of the main package dropped first-load size hard — critical under WeChat's strict size ceiling.</li>
+        <li><strong>Engine subpackage.</strong> Splitting the engine out of the main package dropped first-load size hard — critical under WeChat's strict size ceiling. The exact subpackage + asset-splitting routine is in my <a href="/articles/bundle-size-optimization.html">60% bundle-size teardown</a>.</li>
         <li><strong>PerfTier.</strong> A runtime quality switch that scales effects to the device, so low-end phones don't choke and flagships aren't capped artificially.</li>
       </ul>
 
@@ -150,7 +150,7 @@
         <li>Structured fields over concatenated strings — e.g. an <code>isEquipped</code> flag instead of baking "[Equipped]" into the name — so translations stay clean.</li>
       </ul>
 
-      <p>This is the part most post-mortems skip: <strong>localization is an architecture decision, not a find-and-replace pass.</strong> If you didn't build the seam in week one, you pay for it in a rewrite.</p>
+      <p>This is the part most post-mortems skip: <strong>localization is an architecture decision, not a find-and-replace pass.</strong> If you didn't build the seam in week one, you pay for it in a rewrite. I turned that seam into a full <a href="/articles/cocos-web-game-i18n-guide.html">Cocos web-game i18n guide</a> if you want the step-by-step.</p>
 
       <h2>5. What I'd do differently</h2>
       <ol>
@@ -161,6 +161,14 @@
 
       <h2>6. Takeaways for other small teams</h2>
       <p>If you're building a mini-game or web game on a tight runtime: choose the engine by package-size ceiling first, build UI as code not prefabs, and treat i18n as a foundation pour, not a coat of paint. The game below the surface is the same game everywhere — only the words and the width of the text box change.</p>
+
+      <h2>Related reads</h2>
+      <ul>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a></li>
+        <li><a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization</a></li>
+        <li><a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game</a></li>
+      </ul>
 
       <p><a href="/">← Back to all field notes</a></p>
     </article>

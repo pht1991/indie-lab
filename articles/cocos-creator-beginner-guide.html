@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocos Creator 3.8 for Beginners: Your First Mini-Game</title>
+  <meta name="description" content="A hands-on walkthrough to your first Cocos Creator 3.8 WeChat mini-game: project setup, the node + component model, your first TypeScript script, and the build-to-DevTools flow — with the gotchas I hit shipping a real game." />
+  <link rel="canonical" href="https://phtbyte.com/articles/cocos-creator-beginner-guide.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Cocos Creator 3.8 for Beginners: Your First Mini-Game" />
+  <meta property="og:description" content="From empty project to a running WeChat mini-game — a hands-on walkthrough with the real gotchas." />
+  <meta property="og:url" content="https://phtbyte.com/articles/cocos-creator-beginner-guide.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-beginner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Cocos Creator 3.8 for beginners — build your first mini-game walkthrough" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-beginner.png" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Cocos Creator 3.8 for Beginners: Your First Mini-Game",
+    "description": "From empty project to a running WeChat mini-game — a hands-on walkthrough with the real gotchas.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-10-08",
+    "dateModified": "2026-10-08",
+    "mainEntityOfPage": "https://phtbyte.com/articles/cocos-creator-beginner-guide.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>Cocos Creator 3.8 for Beginners: Your First Mini-Game</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 11 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> You don't need a game-design degree to ship something on Cocos Creator 3.8 — you need the <em>flow</em>: create a WeChat mini-game project, understand that everything is a <strong>node with components</strong>, write one tiny TypeScript script, then build and preview in WeChat DevTools. I shipped a full survival/crafting game on this exact pipeline (the post-mortem is <a href="/articles/how-i-built-kubi.html">here</a>), and the beginner path below is the same five steps I wish someone had handed me on day one — plus the three gotchas that cost me real hours.</p>
+
+      <p>This guide assumes zero Cocos experience. If you're still deciding whether Cocos is even the right engine, my <a href="/articles/cocos-vs-unity-vs-godot.html">engine comparison</a> makes the call for a solo indie. If you've already built a prototype, skip to the build-and-preview section — but read the gotchas even if you skip everything else.</p>
+
+      <h2>1. What you'll have at the end</h2>
+      <p>By the end of this walkthrough you'll have a mini-game you can tap to play in WeChat DevTools: a character sprite that moves when you press a key or tap the screen, sitting in a scene you assembled yourself. It won't be the next hit — but it will be <em>real, running code</em>, and every game I've shipped started as exactly this: one sprite that does one thing.</p>
+
+      <p>More importantly, you'll internalize the one mental model Cocos is built around, because almost every beginner confusion (why doesn't my image show up? why won't it move? where do I put my code?) comes from not seeing it yet.</p>
+
+      <h2>2. Step 1 — Create the project (and pick the right template)</h2>
+      <p>Open Cocos Creator 3.8 LTS and hit <strong>New Project</strong>. Two choices matter:</p>
+      <ul>
+        <li><strong>Template:</strong> pick the <em>2D</em> template (or the "Empty" 2D one if you want zero boilerplate). Most mini-games — including mine — are 2D.</li>
+        <li><strong>Save path:</strong> avoid deep paths with spaces or Chinese characters. A short ASCII path like <code>D:/dev/my-first-game</code> saves you from cryptic build errors later.</li>
+      </ul>
+      <p>You do <em>not</em> need to pick "WeChat Mini Game" as a template — that's not a starting template, it's a <em>build target</em> you choose later. Start in the editor like any other project; the WeChat part is a one-click build at the end.</p>
+
+      <h2>3. Step 2 — The node + component model (the thing to understand)</h2>
+      <p>This is the core. In Cocos, the scene is a <strong>tree of nodes</strong>. A node is just a position in space with a transform. It does nothing by itself. To make a node <em>do</em> something — show an image, play sound, run logic — you attach <strong>components</strong> to it. A sprite on screen is a node that happens to carry a <code>Sprite</code> component (which points at a texture) and a <code>Transform</code> component (where it sits).</p>
+
+      <p>This separation is why beginners get stuck: they add an image but forget the Sprite component, or write code but never attach the script component to a node. The rule is simple — <strong>code lives in components, components live on nodes, nodes live in the scene tree.</strong> Nothing runs unless it's attached to a node in the tree.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A Player sprite node in the scene tree carrying three components — Transform, Sprite, and a custom MoveScript — and how update() drives position">
+          <!-- scene tree -->
+          <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Scene tree</text>
+          <rect x="20" y="40" width="160" height="30" rx="6" fill="#eaf1ff" stroke="#2f6df0"/>
+          <text x="100" y="60" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">Canvas</text>
+          <line x1="100" y1="70" x2="100" y2="90" stroke="#6b6b6b" stroke-width="1.5"/>
+          <rect x="40" y="90" width="160" height="30" rx="6" fill="#eaf7ee" stroke="#27ae60" stroke-width="2"/>
+          <text x="120" y="110" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">Player (Sprite)</text>
+
+          <!-- components column -->
+          <text x="250" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Components on "Player"</text>
+          <rect x="250" y="40" width="180" height="34" rx="6" fill="#fbfbfa" stroke="#cfd8e3"/>
+          <text x="262" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">Transform (x, y, scale)</text>
+          <rect x="250" y="82" width="180" height="34" rx="6" fill="#fbfbfa" stroke="#cfd8e3"/>
+          <text x="262" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">Sprite (texture = hero)</text>
+          <rect x="250" y="124" width="180" height="34" rx="6" fill="#fbfbfa" stroke="#e0a020"/>
+          <text x="262" y="146" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">MoveScript (custom)</text>
+
+          <!-- update loop -->
+          <text x="470" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">What runs</text>
+          <rect x="470" y="40" width="190" height="118" rx="8" fill="#fbfbfa" stroke="#cfd8e3"/>
+          <text x="482" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">update(dt) {</text>
+          <text x="494" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#2f6df0">this.node.x += 100 * dt;</text>
+          <text x="482" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a1a1a">}</text>
+          <text x="482" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">runs ~60×/sec on the node</text>
+
+          <!-- connectors -->
+          <line x1="220" y1="105" x2="248" y2="105" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#b1)"/>
+          <line x1="430" y1="141" x2="468" y2="99" stroke="#e0a020" stroke-width="1.5" marker-end="url(#b1)"/>
+          <defs>
+            <marker id="b1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>The whole engine in one picture: a node in the tree, the components that give it behavior, and the update loop that runs your script ~60 times a second.</figcaption>
+      </figure>
+
+      <h2>4. Step 3 — Your first script (make it move)</h2>
+      <p>Right-click the <code>assets</code> panel → <strong>New → TypeScript</strong> → name it <code>MoveScript</code>. Double-click to open it. Cocos gives you a stub with <code>start()</code> and <code>update()</code>. Edit it to:</p>
+
+      <pre><code>import { _decorator, Component, Node } from 'cc';
+const { ccclass, property } = _decorator;
+
+@ccclass('MoveScript')
+export class MoveScript extends Component {
+  update(deltaTime: number) {
+    // move right at 100 units per second
+    this.node.setPosition(
+      this.node.position.x + 100 * deltaTime,
+      this.node.position.y,
+      0
+    );
+  }
+}</code></pre>
+
+      <p>Now the crucial step beginners miss: <strong>attach the script to the node.</strong> Drag <code>MoveScript.ts</code> from the assets panel onto your Player node in the <em>Hierarchy</em>, or select the node and click <strong>Add Component → Custom → MoveScript</strong> in the <em>Inspector</em>. Hit the play button at the top — the sprite drifts right. That's your first game logic.</p>
+
+      <h2>5. Step 4 — Build for WeChat Mini Game</h2>
+      <p>Top menu → <strong>Project → Build…</strong>. Set:</p>
+      <ul>
+        <li><strong>Platform:</strong> WeChat Mini Game</li>
+        <li><strong>Start Scene:</strong> your main scene</li>
+        <li><strong>Appid:</strong> your WeChat mini-game appid (or use the "test" appid while learning — Cocos accepts a placeholder for local preview)</li>
+      </ul>
+      <p>Two flags matter for real projects and trip up everyone eventually:</p>
+      <ul>
+        <li><strong>Separate Engine:</strong> ON. It splits the engine from your code so the engine is cached by WeChat and your updates stay tiny. I left this off once and wondered why every upload was huge.</li>
+        <li><strong>MD5 Cache:</strong> ON for production. It lets WeChat cache unchanged files so players re-download less on update.</li>
+      </ul>
+      <p>Click <strong>Build</strong>. Cocos outputs a folder (default <code>build/wechatgame/</code>). You don't open that folder directly — you open it <em>with</em> DevTools, next step.</p>
+
+      <h2>6. Step 5 — Preview in WeChat DevTools (the gotcha)</h2>
+      <p>Install <strong>WeChat DevTools</strong> (the mini-program IDE, not the consumer WeChat app). In Cocos <strong>Preferences → Engine Manager</strong>, point "WeChat DevTools Path" at the installed executable — Cocos uses it to auto-launch the preview.</p>
+
+      <p>The gotcha: <strong>never open WeChat DevTools first and then build.</strong> Build from Cocos <em>first</em>, then let Cocos (or the "Preview" button) launch DevTools and import the folder. If DevTools is already open on a stale build, it silently shows the old version and you'll think your code didn't take. Close DevTools, build, then preview.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The five-step path from empty Cocos project to a running WeChat mini-game preview">
+          <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">From empty project to running game</text>
+          <!-- step boxes -->
+          <rect x="20" y="50" width="110" height="56" rx="8" fill="#eaf1ff" stroke="#2f6df0"/>
+          <text x="75" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">1 New Project</text>
+          <text x="75" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">2D template</text>
+
+          <rect x="150" y="50" width="110" height="56" rx="8" fill="#eaf7ee" stroke="#27ae60"/>
+          <text x="205" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">2 Node Tree</text>
+          <text x="205" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">sprite + script</text>
+
+          <rect x="280" y="50" width="110" height="56" rx="8" fill="#fbfbfa" stroke="#e0a020"/>
+          <text x="335" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">3 Write TS</text>
+          <text x="335" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">update loop</text>
+
+          <rect x="410" y="50" width="110" height="56" rx="8" fill="#eaf1ff" stroke="#2f6df0"/>
+          <text x="465" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">4 Build</text>
+          <text x="465" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">WeChat target</text>
+
+          <rect x="540" y="50" width="120" height="56" rx="8" fill="#eaf7ee" stroke="#27ae60" stroke-width="2"/>
+          <text x="600" y="74" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">5 Preview</text>
+          <text x="600" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">DevTools</text>
+
+          <line x1="130" y1="78" x2="148" y2="78" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#b2)"/>
+          <line x1="260" y1="78" x2="278" y2="78" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#b2)"/>
+          <line x1="390" y1="78" x2="408" y2="78" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#b2)"/>
+          <line x1="520" y1="78" x2="538" y2="78" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#b2)"/>
+          <defs>
+            <marker id="b2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>Five steps, in order. The only non-obvious part is step 5: build before you open DevTools, or you'll be debugging yesterday's code.</figcaption>
+      </figure>
+
+      <h2>7. Three gotchas that cost me real hours</h2>
+      <ol>
+        <li><strong>The WeChat size ceiling is real.</strong> A mini-game's main package is capped at 4&nbsp;MB, with subpackages adding more. My first build blew past it in a weekend. The fix isn't "make fewer features" — it's engine subpackaging, an asset audit, and a device-tier split, which I wrote up in my <a href="/articles/bundle-size-optimization.html">bundle-size teardown</a>. Learn the ceiling now, not at launch.</li>
+        <li><strong>Perf is a device problem, not an editor problem.</strong> It runs smooth on your laptop and stutters on a three-year-old phone. Draw calls and overdraw dominate the frame on mobile — my <a href="/articles/cocos-draw-call-optimization.html">runtime perf teardown</a> shows the three moves that fixed mine. Profile on a real device early.</li>
+        <li><strong>Code that isn't attached to a node doesn't exist.</strong> If your script "does nothing," 9 times out of 10 it's not on a node in the scene tree, or the node isn't in the active scene. Check the Hierarchy, not the code, first.</li>
+      </ol>
+
+      <h2>8. Where to go next</h2>
+      <p>You now have a sprite that moves. That's the seed of everything. From here the natural path is: add input (tap/keyboard) to control direction, add a second node as an obstacle, then a score. When you're ready to ship something bigger than a demo, the two articles that saved my real release are the <a href="/articles/bundle-size-optimization.html">bundle-size teardown</a> and the <a href="/articles/cocos-draw-call-optimization.html">draw-call optimization</a> piece — read them before your build crosses a few megabytes or your frame time crosses 16&nbsp;ms.</p>
+
+      <h2>9. Takeaways</h2>
+      <p>Cocos Creator 3.8 is approachable: create a 2D project, internalize that <em>nodes carry components and components carry your code</em>, write one <code>update()</code> loop, then build to WeChat and preview through DevTools (build first, open DevTools second). The engine hides the hard parts — package ceilings and mobile perf — until launch day, so learn those constraints early via the bundle and draw-call write-ups. Everything you ship later is just more nodes, more components, and more loops. Start small, ship the sprite that moves, then grow it.</p>
+
+      <h2>10. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer" — A Cocos Creator WeChat Mini-Game Case Study</a> — the real game this pipeline shipped.</li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a> — the WeChat size ceiling, and how to stay under it.</li>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a> — why Cocos is a sane first choice for a mini-game.</li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
