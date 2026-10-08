@@ -1,0 +1,27 @@
+articles/cocos-vs-unity-vs-godot.html
+  s_2421242316b263::t_c7aadf02e7970b 241-252,256
+  s_2421242316b263::t_b151d56671464c 145-156
+  s_2421242316b263::t_1b26f5d5e65e30 35-66
+  s_2421242316b263::t_6cf26cb70a882d 31
+assets/style.css
+  s_2421242316b263::t_1d147f178bdd98 33-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "397945d2d0035f40b1955b4715bb0d29cbbf583d",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
