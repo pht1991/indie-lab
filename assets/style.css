@@ -389,6 +389,34 @@ footer.site {
   text-align: center;
 }
 
+.foot-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.foot-contact-label {
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.foot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.foot-link:hover { text-decoration: underline; }
+.foot-link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  flex: none;
+}
+
 /* ---------- smooth anchor scrolling ---------- */
 section[id], h2[id], h3[id] { scroll-margin-top: 86px; }
 
