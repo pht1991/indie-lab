@@ -1,0 +1,46 @@
+index.html
+  s_2421242316b263::t_1a0e806b9bc44a 21
+  s_2421242316b263::t_7993faa8d5ad16 192
+  s_2421242316b263::t_2e24c84ff01a65 188
+articles/best-mechanical-keyboards.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/bundle-size-optimization.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/cocos-creator-beginner-guide.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/cocos-vs-unity-vs-godot.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/idle-loop-design.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/indie-tools-2026.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/indie-games-2026.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/cocos-draw-call-optimization.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/how-i-built-kubi.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/indie-game-dev-journey.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+articles/cocos-web-game-i18n-guide.html
+  s_2421242316b263::t_1a0e806b9bc44a 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "912fe63b9b8a2222e6858f037e7512f8d48f3f69",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
