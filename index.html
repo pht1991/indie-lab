@@ -16,6 +16,8 @@
   <meta property="og:image:alt" content="Indie Game Lab — game dev case studies and design breakdowns" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-home.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="/assets/style.css" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -45,83 +47,127 @@
 
   <main class="wrap">
     <section class="hero">
-      <h1>Game dev, minus the hype.</h1>
-      <p>Case studies, engine breakdowns, and design teardowns — written by someone who actually ships games, not someone summarizing other people's YouTube.</p>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="kicker">// Field notes from a shipping game dev</span>
+          <h1>Game dev, <span class="hl">minus the hype.</span></h1>
+          <p>Case studies, engine breakdowns, and design teardowns — written by someone who actually ships games, not someone summarizing other people's YouTube.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#articles">Read the field notes</a>
+            <a class="btn btn-ghost" href="https://kubi.phtbyte.com" target="_blank" rel="noopener">Play my game →</a>
+          </div>
+        </div>
+        <aside class="hero-art" aria-hidden="true">
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="panel-title">scene-tree.cocos</span>
+            </div>
+            <div class="tree">
+              <div class="node node--root">Canvas</div>
+              <div class="node">Player <span class="node-tag">Sprite</span></div>
+              <div class="node node--leaf">Transform</div>
+              <div class="node node--leaf">MoveScript.ts</div>
+            </div>
+          </div>
+        </aside>
+      </div>
     </section>
 
     <section class="section" id="projects">
       <h2>Things I've Built</h2>
-      <ul class="post-list">
-        <li>
-          <h3><a href="https://kubi.phtbyte.com" target="_blank" rel="noopener">Super Miserable Adventurer — Browser Build</a></h3>
-          <p class="excerpt">The playable web version of my Cocos Creator 3.8 game — the same survival/crafting loop, no app store in the way.</p>
-          <p class="meta"><a href="https://kubi.phtbyte.com" target="_blank" rel="noopener">kubi.phtbyte.com →</a></p>
+      <ul class="projects-grid">
+        <li class="project-card">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5.25 5.65v12.7c0 .9.98 1.46 1.77.99l9.1-6.35a1.17 1.17 0 0 0 0-1.98l-9.1-6.35a1.17 1.17 0 0 0-1.77.99z"/></svg>
+          </span>
+          <div>
+            <h3><a href="https://kubi.phtbyte.com" target="_blank" rel="noopener">Super Miserable Adventurer — Browser Build</a></h3>
+            <p class="excerpt">The playable web version of my Cocos Creator 3.8 game — the same survival/crafting loop, no app store in the way.</p>
+            <p class="meta"><a href="https://kubi.phtbyte.com" target="_blank" rel="noopener">kubi.phtbyte.com →</a></p>
+          </div>
         </li>
-        <li>
-          <h3><a href="https://sign.phtbyte.com" target="_blank" rel="noopener">Sign Renderer</a></h3>
-          <p class="excerpt">A Three.js tool that turns a storefront photo into a layered 3D sign mockup — built to make client previews faster.</p>
-          <p class="meta"><a href="https://sign.phtbyte.com" target="_blank" rel="noopener">sign.phtbyte.com →</a></p>
+        <li class="project-card">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.5 21 7v10l-9 4.5L3 17V7z"/><path d="M3 7l9 4.5L21 7M12 11.5V21.5"/></svg>
+          </span>
+          <div>
+            <h3><a href="https://sign.phtbyte.com" target="_blank" rel="noopener">Sign Renderer</a></h3>
+            <p class="excerpt">A Three.js tool that turns a storefront photo into a layered 3D sign mockup — built to make client previews faster.</p>
+            <p class="meta"><a href="https://sign.phtbyte.com" target="_blank" rel="noopener">sign.phtbyte.com →</a></p>
+          </div>
         </li>
       </ul>
     </section>
 
     <section class="section" id="articles">
       <h2>Field Notes</h2>
-      <ul class="post-list">
-        <li>
-          <h3><a href="/articles/how-i-built-kubi.html">How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study</a></h3>
-          <p class="excerpt">A from-the-trenches breakdown of shipping a 750×1334 survival/crafting mini-game on Cocos Creator 3.8: UI grid architecture, performance budget, and what I'd do differently.</p>
-          <p class="meta">By Haitao Pan · 12 min read · Game Engine, Case Study</p>
+      <ul class="post-grid">
+        <li class="card card--casestudy">
+          <div class="card-top"><span class="tag tag--casestudy">Case Study</span><span class="pill">12 min</span></div>
+          <h3 class="card-title"><a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer" — A Cocos Creator WeChat Mini-Game Case Study</a></h3>
+          <p class="card-excerpt">A from-the-trenches breakdown of shipping a 750×1334 survival/crafting mini-game on Cocos Creator 3.8: UI grid architecture, performance budget, and what I'd do differently.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/indie-game-dev-journey.html">My Indie Game Dev Journey: Lessons From Shipping KuBi</a></h3>
-          <p class="excerpt">Who I am and why this site exists — a studio owner's path from web dev to shipping original Cocos Creator mini-games, and going global with an English content site.</p>
-          <p class="meta">By Haitao Pan · 9 min read · About, Studio Owner</p>
+        <li class="card card--about">
+          <div class="card-top"><span class="tag tag--about">About</span><span class="pill">9 min</span></div>
+          <h3 class="card-title"><a href="/articles/indie-game-dev-journey.html">My Indie Game Dev Journey: Lessons From Shipping KuBi</a></h3>
+          <p class="card-excerpt">Who I am and why this site exists — a studio owner's path from web dev to shipping original Cocos Creator mini-games, and going global with an English content site.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></h3>
-          <p class="excerpt">A pragmatic engine comparison for solo teams: package-size ceilings, TypeScript support, platform targets, and the call I'd actually make.</p>
-          <p class="meta">By Haitao Pan · 11 min read · Game Engine, Comparison</p>
+        <li class="card card--comparison">
+          <div class="card-top"><span class="tag tag--comparison">Comparison</span><span class="pill">11 min</span></div>
+          <h3 class="card-title"><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></h3>
+          <p class="card-excerpt">A pragmatic engine comparison for solo teams: package-size ceilings, TypeScript support, platform targets, and the call I'd actually make.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/cocos-creator-beginner-guide.html">Cocos Creator 3.8 for Beginners: Build Your First Mini-Game</a></h3>
-          <p class="excerpt">A hands-on walkthrough from empty project to a running WeChat mini-game: the node + component model, your first TypeScript script, and the build-to-DevTools flow — with the real gotchas I hit shipping a game.</p>
-          <p class="meta">By Haitao Pan · 11 min read · Tutorial, Getting Started</p>
+        <li class="card card--tutorial">
+          <div class="card-top"><span class="tag tag--tutorial">Tutorial</span><span class="pill">11 min</span></div>
+          <h3 class="card-title"><a href="/articles/cocos-creator-beginner-guide.html">Cocos Creator 3.8 for Beginners: Build Your First Mini-Game</a></h3>
+          <p class="card-excerpt">A hands-on walkthrough from empty project to a running WeChat mini-game: the node + component model, your first TypeScript script, and the build-to-DevTools flow — with the real gotchas I hit shipping a game.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a></h3>
-          <p class="excerpt">A Cocos Creator teardown: engine subpackaging, asset splitting behind the first screen, a ruthless texture audit (the skydome went), dead-resource cleanup, and a runtime PerfTier that streams by device.</p>
-          <p class="meta">By Haitao Pan · 10 min read · Performance, Tutorial</p>
+        <li class="card card--performance">
+          <div class="card-top"><span class="tag tag--performance">Performance</span><span class="pill">10 min</span></div>
+          <h3 class="card-title"><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a></h3>
+          <p class="card-excerpt">A Cocos Creator teardown: engine subpackaging, asset splitting behind the first screen, a ruthless texture audit (the skydome went), dead-resource cleanup, and a runtime PerfTier that streams by device.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices</a></h3>
-          <p class="excerpt">A runtime performance teardown from a shipped Cocos Creator 3.8 mini-game: atlas batching, overdraw control, and code-built UI grids that cut draw calls and reclaim frame time on low-end phones.</p>
-          <p class="meta">By Haitao Pan · 11 min read · Performance, Tutorial</p>
+        <li class="card card--performance">
+          <div class="card-top"><span class="tag tag--performance">Performance</span><span class="pill">11 min</span></div>
+          <h3 class="card-title"><a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization: Cutting Frame Time on Real Devices</a></h3>
+          <p class="card-excerpt">A runtime performance teardown from a shipped Cocos Creator 3.8 mini-game: atlas batching, overdraw control, and code-built UI grids that cut draw calls and reclaim frame time on low-end phones.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/idle-loop-design.html">Designing a Satisfying Idle Loop: Lessons from Shipping a Survival RPG</a></h3>
-          <p class="excerpt">Progression math and retention levers from a real Cocos Creator survival/idle RPG: one rule, two goal tiers, and the systems I cut to make the loop tight.</p>
-          <p class="meta">By Haitao Pan · 11 min read · Game Design</p>
+        <li class="card card--gamedesign">
+          <div class="card-top"><span class="tag tag--gamedesign">Game Design</span><span class="pill">11 min</span></div>
+          <h3 class="card-title"><a href="/articles/idle-loop-design.html">Designing a Satisfying Idle Loop: Lessons from Shipping a Survival RPG</a></h3>
+          <p class="card-excerpt">Progression math and retention levers from a real Cocos Creator survival/idle RPG: one rule, two goal tiers, and the systems I cut to make the loop tight.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)</a></h3>
-          <p class="excerpt">How I made a Chinese-only Cocos Creator 3.8 build multilingual: one localization layer, CJK-aware text metrics, and structured fields instead of concatenated labels.</p>
-          <p class="meta">By Haitao Pan · 10 min read · Localization, Tutorial</p>
+        <li class="card card--tutorial">
+          <div class="card-top"><span class="tag tag--tutorial">Tutorial</span><span class="pill">10 min</span></div>
+          <h3 class="card-title"><a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)</a></h3>
+          <p class="card-excerpt">How I made a Chinese-only Cocos Creator 3.8 build multilingual: one localization layer, CJK-aware text metrics, and structured fields instead of concatenated labels.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/indie-games-2026.html">7 Indie Games You Missed in 2026 (and What Devs Can Learn)</a></h3>
-          <p class="excerpt">A developer's lens on 7 under-the-radar 2026 indie games — what each teaches about scope, art direction, retention, and platform, plus where to go next on this site.</p>
-          <p class="meta">By Haitao Pan · 13 min read · Indie Games, Roundup</p>
+        <li class="card card--roundup">
+          <div class="card-top"><span class="tag tag--roundup">Roundup</span><span class="pill">13 min</span></div>
+          <h3 class="card-title"><a href="/articles/indie-games-2026.html">7 Indie Games You Missed in 2026 (and What Devs Can Learn)</a></h3>
+          <p class="card-excerpt">A developer's lens on 7 under-the-radar 2026 indie games — what each teaches about scope, art direction, retention, and platform, plus where to go next on this site.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/indie-tools-2026.html">Top 7 Free &amp; Paid Tools to Ship an Indie Game on a Budget</a></h3>
-          <p class="excerpt">A working indie developer's honest shortlist of free and paid tools to ship a game on a near-zero budget in 2026: engines, art, audio, code, and publishing — and the one paid tool worth paying for.</p>
-          <p class="meta">By Haitao Pan · 10 min read · Tools, Buying Guide</p>
+        <li class="card card--tools">
+          <div class="card-top"><span class="tag tag--tools">Tools</span><span class="pill">10 min</span></div>
+          <h3 class="card-title"><a href="/articles/indie-tools-2026.html">Top 7 Free &amp; Paid Tools to Ship an Indie Game on a Budget</a></h3>
+          <p class="card-excerpt">A working indie developer's honest shortlist of free and paid tools to ship a game on a near-zero budget in 2026: engines, art, audio, code, and publishing — and the one paid tool worth paying for.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
-        <li>
-          <h3><a href="/articles/best-mechanical-keyboards.html">Best Mechanical Keyboards for Game Developers in 2026 (Under $100 / $200)</a></h3>
-          <p class="excerpt">A developer's practical pick: switch feel, form factor, and what actually matters when you type 8 hours a day and frag for two more. Budget and mid-range picks with honest trade-offs.</p>
-          <p class="meta">By Haitao Pan · 11 min read · Gear, Buying Guide</p>
+        <li class="card card--gear">
+          <div class="card-top"><span class="tag tag--gear">Gear</span><span class="pill">11 min</span></div>
+          <h3 class="card-title"><a href="/articles/best-mechanical-keyboards.html">Best Mechanical Keyboards for Game Developers in 2026 (Under $100 / $200)</a></h3>
+          <p class="card-excerpt">A developer's practical pick: switch feel, form factor, and what actually matters when you type 8 hours a day and frag for two more. Budget and mid-range picks with honest trade-offs.</p>
+          <div class="card-meta">By Haitao Pan</div>
         </li>
       </ul>
     </section>
