@@ -62,6 +62,7 @@ const jobs = [
   { file: 'og-drawcall.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator 3.8', 'Draw Call Optimization'], subtitle: 'Cutting Frame Time on Real Devices — A Runtime Teardown' } },
   { file: 'og-journey.png', data: { chip: 'INDIE GAME LAB', titleLines: ['My Indie Game Dev', 'Journey'], subtitle: 'Lessons From Shipping KuBi — The Story Behind Indie Game Lab' } },
   { file: 'og-beginner.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator 3.8', 'for Beginners'], subtitle: 'Build Your First Mini-Game — A Hands-On Walkthrough' } },
+  { file: 'og-signpreview.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Preview Your', 'Storefront Sign in 3D'], subtitle: 'Before You Fabricate It — Free Browser Tool' } },
 ];
 
 mkdirSync(OUT, { recursive: true });

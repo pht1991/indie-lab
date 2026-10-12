@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview Your Storefront Sign in 3D Before You Fabricate It</title>
+  <meta name="description" content="Most sign mistakes are committed to before fabrication even begins. Here's how to preview a shop, café, or restaurant sign in 3D on a real facade first — and the free browser tool I use to do it." />
+  <link rel="canonical" href="https://phtbyte.com/articles/preview-storefront-sign-3d.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Preview Your Storefront Sign in 3D Before You Fabricate It" />
+  <meta property="og:description" content="Most sign mistakes are committed to before fabrication begins. Preview it in 3D on a real facade first — free browser tool included." />
+  <meta property="og:url" content="https://phtbyte.com/articles/preview-storefront-sign-3d.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-signpreview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Preview your storefront sign in 3D before fabrication" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-signpreview.png" />
+  <link rel="stylesheet" href="/assets/style.css?v=20261010b" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Preview Your Storefront Sign in 3D Before You Fabricate It",
+    "description": "Most sign mistakes are committed to before fabrication begins. Preview it in 3D on a real facade first — free browser tool included.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-10-12",
+    "dateModified": "2026-10-12",
+    "mainEntityOfPage": "https://phtbyte.com/articles/preview-storefront-sign-3d.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>Preview Your Storefront Sign in 3D Before You Fabricate It</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 8 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> The most expensive sign decisions are the ones you make before fabrication even starts — size, depth, material, the gap from the wall. A 3D preview on a real photo of your facade catches those mistakes for free. I built a small browser tool (<a href="https://sign.phtbyte.com/" target="_blank" rel="noopener">Sign Renderer</a>) to do exactly that: drop in your logo, set depth and material, and see it on the building before you pay a fabricator a cent. This post walks through <em>why</em> previewing matters and how to do it in five minutes.</p>
+
+      <p>If you came here from the game-dev side of this site, the mental model is the same one I use shipping games: <a href="/articles/cocos-vs-unity-vs-godot.html">pick the right tool for the constraint</a>, then iterate on a cheap prototype before committing to the expensive build. A sign is just a tiny physical product — and the prototype is the 3D mockup.</p>
+
+      <h2>1. The mistake is committed before fabrication</h2>
+      <p>Walk past any retail street and you'll see it: a sign that's too deep for the recessed entry, letters that vanish against a busy background, a logo stretched because the original vector got lost. None of those are fabrication errors. They're <em>design</em> errors — and by the time the fabricator cuts the acrylic, the money is already spent.</p>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two paths: commit blind vs preview first">
+        <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#14161c">The two paths</text>
+        <rect x="20" y="46" width="300" height="140" rx="10" fill="#fdecec" stroke="#e8590c"/>
+        <text x="38" y="74" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#b8430a">Path A — commit blind</text>
+        <text x="38" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">1. Pick size &amp; material on a hunch</text>
+        <text x="38" y="120" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">2. Pay fabricator to build it</text>
+        <text x="38" y="140" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">3. See it on the wall → wrong</text>
+        <text x="38" y="166" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#b8430a">Cost: rebuild from scratch</text>
+        <rect x="360" y="46" width="300" height="140" rx="10" fill="#eaf7ee" stroke="#27ae60"/>
+        <text x="378" y="74" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a7a3c">Path B — preview first</text>
+        <text x="378" y="100" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">1. Upload logo + facade photo</text>
+        <text x="378" y="120" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">2. Tweak depth / material live</text>
+        <text x="378" y="140" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#14161c">3. Export the mockup</text>
+        <text x="378" y="166" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">Cost: a few minutes, $0</text>
+      </svg>
+      <figcaption>Path B doesn't guarantee a perfect sign — it just makes the cheap iteration happen <em>before</em> the expensive one.</figcaption>
+      </figure>
+
+      <h2>2. What a useful preview actually shows you</h2>
+      <p>A flat mockup in Photoshop tells you what the sign looks like in isolation. That's not the question. The question is what it looks like <em>on the building</em>, at eye level, with the real lighting and the real recess. A proper 3D preview surfaces four things a flat file can't:</p>
+      <ul>
+        <li><strong>Depth vs. clearance.</strong> A 10&nbsp;cm channel letter looks great in a render and hits the doorway trim in reality. Extrude it in 3D and the collision is obvious.</li>
+        <li><strong>Scale against the facade.</strong> Logos get shrunk to fit a spec sheet and then look timid on a wide storefront. Preview at true scale or don't bother.</li>
+        <li><strong>Material under light.</strong> Brushed steel, acrylic, neon — they read completely differently against a brick wall versus a glass curtain wall. See it before you pay for the wrong one.</li>
+        <li><strong>Placement and angle.</strong> A sign bent to a curved facade (common on building corners) only makes sense once you see the arc on the actual surface.</li>
+      </ul>
+
+      <h2>3. The five-minute workflow</h2>
+      <p>Here's the loop I use in <a href="https://sign.phtbyte.com/" target="_blank" rel="noopener">Sign Renderer</a>, my free browser tool — no install, no account:</p>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 680 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The sign preview pipeline: photo, logo, depth/material, render, export">
+        <rect x="14" y="56" width="118" height="58" rx="8" fill="#eaf1ff" stroke="#2f6df0"/>
+        <text x="73" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">1 Photo</text>
+        <text x="73" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">facade shot</text>
+        <rect x="150" y="56" width="118" height="58" rx="8" fill="#eaf7ee" stroke="#27ae60"/>
+        <text x="209" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">2 Logo</text>
+        <text x="209" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">SVG / image</text>
+        <rect x="286" y="56" width="118" height="58" rx="8" fill="#fff7e8" stroke="#e0a020"/>
+        <text x="345" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">3 Tune</text>
+        <text x="345" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">depth + material</text>
+        <rect x="422" y="56" width="118" height="58" rx="8" fill="#eaf1ff" stroke="#2f6df0"/>
+        <text x="481" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">4 Render</text>
+        <text x="481" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">3D on facade</text>
+        <rect x="558" y="56" width="108" height="58" rx="8" fill="#eaf7ee" stroke="#27ae60" stroke-width="2"/>
+        <text x="612" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1a7a3c">5 Export</text>
+        <text x="612" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10.5" fill="#6b6b6b">mockup PNG</text>
+        <g stroke="#6b6b6b" stroke-width="1.6" fill="none">
+          <line x1="132" y1="85" x2="148" y2="85"/><line x1="268" y1="85" x2="284" y2="85"/><line x1="404" y1="85" x2="420" y2="85"/><line x1="540" y1="85" x2="556" y2="85"/>
+        </g>
+      </svg>
+      <figcaption>Upload a facade photo, drop in your logo, tune depth and material live, render, export. The whole thing is under five minutes.</figcaption>
+      </figure>
+
+      <ol>
+        <li><strong>Upload a facade photo.</strong> A straight-on shot of the wall where the sign goes. The tool maps your sign onto that surface, so the photo <em>is</em> the context.</li>
+        <li><strong>Drop in your logo.</strong> SVG gives the cleanest edges, but PNG/JPG works. If you don't have one handy, the sample logo gets you to step three immediately.</li>
+        <li><strong>Tune depth and material.</strong> This is the part a flat mockup can't show — slide the extrusion, switch the material, turn on the curved-facade arc if your corner isn't flat.</li>
+        <li><strong>Render on the facade.</strong> You're now looking at the sign the way a passerby will: at scale, in place, under the building's own geometry.</li>
+        <li><strong>Export the mockup.</strong> Send that PNG to the fabricator as the spec. You've already de-risked the three things they can't take back.</li>
+      </ol>
+
+      <h2>4. When it's worth it (and when it isn't)</h2>
+      <p>Preview every time the sign is customer-facing, large, or expensive to redo — which is most commercial signs. Skip it only for a temporary poster or a $20 sticker. The break-even point is absurdly low: one avoided rebuild pays for a thousand previews.</p>
+
+      <p>If you build games or web tools the way I do, this is the same discipline as <a href="/articles/indie-game-dev-journey.html">shipping a prototype before the polished build</a> — fail cheap, fail early, commit when the mockup is right.</p>
+
+      <h2>5. Try it</h2>
+      <p>The tool is free and runs in the browser: <a href="https://sign.phtbyte.com/" target="_blank" rel="noopener">sign.phtbyte.com</a>. Upload a photo of your storefront, paste your logo, and you'll have a 3D mockup before this paragraph would have taken to read twice. If the preview saves you one rebuild, it paid for itself.</p>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+</body>
+</html>
