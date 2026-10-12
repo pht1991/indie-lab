@@ -1,0 +1,28 @@
+sitemap.xml
+  s_2421242316b263::t_29a1b56ddfda93 63-67
+assets/og/gen-og.cjs
+  s_2421242316b263::t_b27f0b9b73d996 65
+articles/preview-storefront-sign-3d.html
+  s_2421242316b263::t_2678e4127ab283 1-137
+index.html
+  s_2421242316b263::t_454bbf2d52c7f7 166-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "b8fb116f2c0f1de6a1cad5d3b4c67e0c384fd458",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
