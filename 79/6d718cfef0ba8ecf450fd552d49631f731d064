@@ -1,0 +1,31 @@
+assets/og/gen-og.cjs
+  s_2421242316b263::t_21dd5b3effd512 67
+articles/cocos-4-open-source.html
+  s_2421242316b263::t_9d1325ed5c3e61 183
+sitemap.xml
+  s_2421242316b263::t_5c0798760e534f 73-77
+articles/cocos-3.8-to-cc4-migration.html
+  s_2421242316b263::t_8640cd77be5652 1-18,20-202
+  s_2421242316b263::t_d42c40d51f7fca 19
+index.html
+  s_2421242316b263::t_532bbe11ba1e8d 130-135
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "796d718cfef0ba8ecf450fd552d49631f731d064",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
