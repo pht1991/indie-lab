@@ -438,3 +438,50 @@ section[id]:target h2 { animation: anchorFlash 1.1s ease-out; border-radius: var
   body { font-size: 16px; }
   nav.site a { margin-left: 14px; font-size: 14px; }
 }
+
+/* ---------- Amazon gear cards (native-ads slot) ---------- */
+section.native-ads {
+  margin: 2.5rem 0 0;
+  padding: 1.6rem 1.6rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+section.native-ads h2 { margin: 0 0 1rem; font-size: 22px; }
+section.native-ads .gear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+section.native-ads .gear-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+section.native-ads .gear-card:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+section.native-ads .gear-card-label { font-weight: 700; font-size: 15px; }
+section.native-ads .gear-card-blurb { color: var(--muted); font-size: 14px; line-height: 1.55; }
+section.native-ads .gear-card-cta {
+  margin-top: auto;
+  padding-top: 6px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13.5px;
+}
+section.native-ads .disclaimer {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}

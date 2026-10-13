@@ -28,7 +28,7 @@ const TEMPLATE = path.join(ROOT, 'src', 'template-article.html');
 const SITEMAP_PATH = path.join(ROOT, 'sitemap.xml');
 const SITE_BASE = 'https://phtbyte.com';
 
-const CSS_VERSION = '20261010b';
+const CSS_VERSION = '20261013a';
 
 if (!fs.existsSync(TEMPLATE)) {
   console.error('template not found:', TEMPLATE);
@@ -100,6 +100,54 @@ for (const f of files) {
     out = out.replace('{{EXTRA_LD}}', extraHtml);
   } else {
     out = out.replace(/\{\{EXTRA_LD\}\}\n/, '');
+  }
+
+  // Amazon monetization slot. Two modes, opted in per source via meta.amazonNative:
+  //  1) mode:"static" — no backend tooling needed. Renders hand-picked gear cards
+  //     with tagged Amazon search links (price never hardcoded, FTC line included).
+  //  2) JS Native Shopping Ads (default) — rendered only when adInstanceId is set
+  //     and is not the TODO sentinel. Kept in case NSA access is restored later.
+  // Adding the field without a real config never changes the built output.
+  const NATIVE_SENTINEL = 'TODO_REPLACE_WITH_ASSOCIATES_ID';
+  const nativeMeta = meta.amazonNative;
+  let nativeHtml = '';
+  const escHtml = (s) =>
+    String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  if (nativeMeta && nativeMeta.mode === 'static' && Array.isArray(nativeMeta.cards) && nativeMeta.cards.length) {
+    const title = nativeMeta.title || 'Gear & tools for this build';
+    const cards = nativeMeta.cards
+      .map((c) => {
+        const href = 'https://www.amazon.com/s?k=' + encodeURIComponent(c.term || c.label) + '&tag=phtbyte-20';
+        return (
+          '      <a class="gear-card" href="' + href + '" rel="sponsored nofollow noopener" target="_blank">\n' +
+          '        <span class="gear-card-label">' + escHtml(c.label) + '</span>\n' +
+          (c.blurb ? '        <span class="gear-card-blurb">' + escHtml(c.blurb) + '</span>\n' : '') +
+          '        <span class="gear-card-cta">Check current price on Amazon →</span>\n' +
+          '      </a>'
+        );
+      })
+      .join('\n');
+    nativeHtml =
+      '  <section class="native-ads">\n' +
+      '    <h2>' + escHtml(title) + '</h2>\n' +
+      '    <div class="gear-grid">\n' + cards + '\n    </div>\n' +
+      '    <p class="disclaimer">As an Amazon Associate I earn from qualifying purchases. Prices shown on Amazon, never here.</p>\n' +
+      '  </section>';
+  } else if (nativeMeta && nativeMeta.adInstanceId && nativeMeta.adInstanceId !== NATIVE_SENTINEL) {
+    const title = nativeMeta.title || 'Gear & tools for this build';
+    const adId = nativeMeta.adInstanceId;
+    nativeHtml =
+      '  <section class="native-ads">\n' +
+      '    <h2>' + escHtml(title) + '</h2>\n' +
+      '    <div id="amazon-native-ad-' + adId + '"></div>\n' +
+      '    <script async src="https://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=' + adId + '&tag=phtbyte-20"></script>\n' +
+      '    <p class="disclaimer">As an Amazon Associate I earn from qualifying purchases.</p>\n' +
+      '  </section>';
+  }
+  if (nativeHtml) {
+    out = out.replace('{{AMAZON_NATIVE}}', nativeHtml);
+  } else {
+    out = out.replace(/^[ \t]*\{\{AMAZON_NATIVE\}\}\s*\n/m, '');
   }
 
   const slug = f.replace(/\.html$/, '');
