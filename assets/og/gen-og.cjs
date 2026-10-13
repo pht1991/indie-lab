@@ -64,6 +64,7 @@ const jobs = [
   { file: 'og-beginner.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator 3.8', 'for Beginners'], subtitle: 'Build Your First Mini-Game — A Hands-On Walkthrough' } },
   { file: 'og-signpreview.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Preview Your', 'Storefront Sign in 3D'], subtitle: 'Before You Fabricate It — Free Browser Tool' } },
   { file: 'og-cc4.png', data: { chip: 'INDIE GAME LAB', titleLines: ['COCOS 4 Is', 'Open Source'], subtitle: 'MIT, Engine/IDE Split — My 3.8 Migration Call' } },
+  { file: 'og-cc4mig.png', data: { chip: 'INDIE GAME LAB', titleLines: ['Cocos Creator 3.8', '→ COCOS 4'], subtitle: 'A Solo Indie Migration Playbook — Staged & Gated' } },
 ];
 
 mkdirSync(OUT, { recursive: true });

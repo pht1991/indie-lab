@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocos Creator 3.8 → COCOS 4: A Solo Indie Migration Playbook</title>
+  <meta name="description" content="I run a Cocos Creator 3.8 WeChat mini-game in production and haven't migrated to COCOS 4 yet. Here's the honest, staged migration playbook I'd follow — what actually changes, the real breaking points, and the go/no-go gates for a solo dev." />
+  <link rel="canonical" href="https://phtbyte.com/articles/cocos-3.8-to-cc4-migration.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Cocos Creator 3.8 → COCOS 4: A Solo Indie Migration Playbook" />
+  <meta property="og:description" content="What actually changes when you move a 3.8 project to COCOS 4 — engine open, PinK closed, real breaking points, and a staged go/no-go plan for solo devs." />
+  <meta property="og:url" content="https://phtbyte.com/articles/cocos-3.8-to-cc4-migration.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-cc4mig.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Cocos Creator 3.8 to COCOS 4 — a solo indie migration playbook" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-cc4mig.png" />
+  <link rel="stylesheet" href="/assets/style.css?v=20261010b" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Cocos Creator 3.8 → COCOS 4: A Solo Indie Migration Playbook",
+    "description": "A staged, honest migration playbook for moving a Cocos Creator 3.8 project to COCOS 4 — what changes, the real breaking points, and the go/no-go gates for a solo developer.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-10-13",
+    "dateModified": "2026-10-13",
+    "mainEntityOfPage": "https://phtbyte.com/articles/cocos-3.8-to-cc4-migration.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>Cocos Creator 3.8 → COCOS 4: A Solo Indie Migration Playbook</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 11 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> I ship a Cocos Creator 3.8 WeChat mini-game in production and I have <em>not</em> migrated to COCOS 4 yet — and I won't for that project. But "should I" (my <a href="/articles/cocos-4-open-source.html">open-source breakdown</a>) is a different question from "how would I if I did." This is the second one: a staged, honest migration playbook for a solo dev, covering what actually changes in your toolchain, the real breaking points the changelogs list, and the go/no-go gates that keep a migration from eating your weekend. Skim the diagram, read the gates.</p>
+
+      <h2>1. Who this is for (and who should close the tab)</h2>
+      <p>This playbook assumes: you have a working 3.x project, you're a team of one or two, and you're weighing a move to COCOS 4. It is <em>not</em> for you if:</p>
+      <ul>
+        <li>Your live target is a <strong>WeChat or HTML5 mini-game</strong> shipping today — COCOS 4's mini-game support is still rolling out gradually. Stay on 3.8 (I explain why in <a href="/articles/cocos-4-open-source.html">the open-source piece</a>).</li>
+        <li>You just want "new = better" — it isn't, for a stable shipped game. The engine being open source doesn't pay your rent this quarter.</li>
+      </ul>
+      <p>If your next project needs <strong>Steam / native targets and a hard MIT requirement</strong>, then yes, read on — this is exactly the case where COCOS 4 earns its place.</p>
+
+      <h2>2. What "migrating" actually means now</h2>
+      <p>The first mental shift: COCOS 4 isn't "Cocos Creator 4." The bundle you know splits into three pieces, and only two of them are what the MIT announcement covers:</p>
+      <ul>
+        <li><strong>COCOS (engine)</strong> — open source under MIT. This is the part you can read, patch, and fork.</li>
+        <li><strong>cocos-cli</strong> — the headless command line. Also open source. This is where build and preview move.</li>
+        <li><strong>PinK (IDE)</strong> — the new editor. It's where the visual editing from Cocos Creator migrates, it's built on a Cocos-customized VSCode with built-in API/MCP/skill/agent hooks, and as of this writing it ships in <em>alpha behind activation codes</em>. The editor is the part you still depend on daily — and it's the part that is <em>not</em> open source yet.</li>
+      </ul>
+      <p>So the honest framing: you're not "upgrading an engine," you're <strong>swapping a proven closed editor (Cocos Creator) for a closed alpha editor (PinK) wrapped around an open engine + CLI</strong>. The open-source win is real, but your day-to-day editing still rides on something in flux.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cocos Creator 3.8 toolchain versus COCOS 4 toolchain: which parts are open versus closed">
+          <text x="20" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Cocos Creator 3.8 (today)</text>
+          <rect x="20" y="40" width="300" height="64" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="40" y="66" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">Cocos Creator editor</text>
+          <text x="40" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">editor + engine, one closed bundle</text>
+          <text x="40" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#27ae60">status: proven, complete</text>
+
+          <text x="360" y="26" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">COCOS 4 (target)</text>
+          <rect x="360" y="40" width="300" height="56" rx="10" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="380" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">COCOS engine + cocos-cli</text>
+          <text x="380" y="84" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">MIT open source</text>
+
+          <rect x="360" y="104" width="300" height="56" rx="10" fill="#fff6e8" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="380" y="128" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">PinK (editor)</text>
+          <text x="380" y="148" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">closed, alpha, activation-gated</text>
+
+          <line x1="320" y1="72" x2="358" y2="72" stroke="#6b6b6b" stroke-width="1.6" marker-end="url(#arr3)"/>
+          <text x="324" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">migrate to</text>
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption>Your editing still rides on PinK — open engine, closed (alpha) editor. Plan around that gap.</figcaption>
+      </figure>
+
+      <h2>3. The real migration surface (the breaking points)</h2>
+      <p>"Evolution of 3.x, SemVer, six-month deprecate-to-remove window" sounds gentle. It is — compared to a rewrite. But the early COCOS 4 / cocos-cli changelogs list concrete breaking points a solo dev will actually hit. The ones that matter for a typical 3.x game:</p>
+      <ul>
+        <li><strong>Builder web-mobile plugin migration.</strong> The web/HTML5 build pipeline is being restructured. If you target web or WeChat, expect build config and plugin wiring to shift.</li>
+        <li><strong>Builder Android package-structure migration.</strong> Android output layout changes — relevant the moment you add a Google Play target.</li>
+        <li><strong>PreviewService breaking change.</strong> Asset preview moves to an independent preview page. Anything that scripted the old preview path breaks.</li>
+        <li><strong>Assets material-related API.</strong> New material APIs land via the CLI — your custom material/shader tooling needs a check.</li>
+        <li><strong>Spine runtime version selection.</strong> COCOS 4 lets you pick the Spine runtime version in editor/preview — good, but it's a new knob you must set deliberately or animations silently mismatch.</li>
+      </ul>
+      <p>None of these are fatal. Every one of them is a place where a 3.x project fails to build or renders wrong <em>until you touch it</em>. The playbook below turns that list into a checklist instead of a surprise.</p>
+
+      <h2>4. The staged migration plan (with go/no-go gates)</h2>
+      <p>I'd never "just upgrade." I'd run it as a branch with hard gates — each stage has a stop condition. If a gate fails, you don't proceed; you stay on 3.8 and revisit in a month.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Staged COCOS 4 migration flow with go/no-go gates">
+          <defs>
+            <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <rect x="30" y="20" width="240" height="48" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="50" y="44" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">1 · Assess</text>
+          <text x="50" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">target = native/Steam? MIT hard?</text>
+
+          <rect x="30" y="100" width="240" height="48" rx="10" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="50" y="124" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">2 · Branch</text>
+          <text x="50" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">git branch cc4, pin 3.8 on main</text>
+
+          <rect x="30" y="180" width="240" height="48" rx="10" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="50" y="204" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">3 · Toolchain</text>
+          <text x="50" y="222" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">install PinK + cocos-cli, open project</text>
+
+          <rect x="30" y="260" width="240" height="48" rx="10" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="50" y="284" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">4 · Build &amp; assets</text>
+          <text x="50" y="302" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">web-mobile/Android, material/Spine</text>
+
+          <rect x="410" y="100" width="240" height="48" rx="10" fill="#fff6e8" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="430" y="124" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">5 · Runtime &amp; perf</text>
+          <text x="430" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">retest on real device, frame time</text>
+
+          <rect x="410" y="180" width="240" height="48" rx="10" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="430" y="204" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">6 · Go / No-go</text>
+          <text x="430" y="222" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">ship on cc4, or stay on 3.8</text>
+
+          <line x1="150" y1="68" x2="150" y2="96" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <line x1="150" y1="148" x2="150" y2="176" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <line x1="150" y1="228" x2="150" y2="256" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <line x1="270" y1="284" x2="408" y2="204" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <line x1="530" y1="148" x2="530" y2="176" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+
+          <rect x="300" y="262" width="90" height="36" rx="8" fill="#fdeaea" stroke="#e05656"/>
+          <text x="345" y="285" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#e05656">gate fails?</text>
+          <line x1="345" y1="256" x2="345" y2="262" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="4 3"/>
+        </svg>
+        <figcaption>Branch it, gate it. Every stage has a stop condition — a failing gate means "stay on 3.8," not "push through."</figcaption>
+      </figure>
+
+      <h3>Gate 1 — Assess (day 0)</h3>
+      <p>Write down your hard reasons. "Open source" is not a reason to move a shipped game; "I need a Steam build and a MIT license for a client contract" is. If your reasons survive that sentence, proceed.</p>
+
+      <h3>Gate 2 — Branch (day 0)</h3>
+      <p>Branch from a clean 3.8 main. <strong>Never migrate in place.</strong> You want a one-command rollback to a building 3.8 game. If your repo isn't clean enough to branch cleanly, that's your first task, not the migration.</p>
+
+      <h3>Gate 3 — Toolchain (day 1)</h3>
+      <p>Install PinK and cocos-cli, open the project. If PinK can't open your scene graph without throwing, or the alpha is unstable on your OS, stop — the editor is your daily tool and it's not ready. This gate alone has killed more than one "let's try COCOS 4" weekend.</p>
+
+      <h3>Gate 4 — Build &amp; assets (day 1–3)</h3>
+      <p>Rebuild for your target. Walk the breaking-point list: web-mobile build config, Android package layout, PreviewService path, material APIs, Spine runtime version. Each item is a checkbox. If the build is green and assets render, proceed; if two or more need deep rework, reconsider.</p>
+
+      <h3>Gate 5 — Runtime &amp; perf (day 3–5)</h3>
+      <p>This is where 3.8's maturity shows. My 3.8 game has a custom PerfTier and engine subpackaging I tuned for low-end phones (the <a href="/articles/bundle-size-optimization.html">bundle-size teardown</a> covers it). On COCOS 4 you re-validate all of it on a real device — frame time, first-load size, draw calls. If perf regresses and you can't explain why in an afternoon, that's a no-go.</p>
+
+      <h3>Gate 6 — Go / No-go (day 5+)</h3>
+      <p>If every gate passed: merge, ship the new target on cc4, keep 3.8 main as a fallback branch for a release or two. If any gate failed: stay on 3.8, set a calendar reminder for 30–60 days out. The six-month deprecation window means you're not late — you're early.</p>
+
+      <h2>5. The WeChat mini-game special case</h2>
+      <p>I keep calling this out because it's my actual situation. A WeChat mini-game lives or dies on the mini-game build target and WeChat DevTools integration. COCOS 4's mini-game support is described as <em>gradual</em>, and PinK is alpha. For a game already earning or learning in production, that combination is a hard stop: you'd be trading a complete, stable pipeline for an incomplete one to get a license label you don't need. My 3.8 game stays on 3.8. COCOS 4 becomes interesting for me the day I start a <em>new</em> project whose first target isn't WeChat.</p>
+
+      <h2>6. My call</h2>
+      <p>Same as the open-source piece, now operationalized: <strong>branch, don't lift-and-shift; gate, don't hope.</strong> COCOS 4 is the future of the engine and the MIT story is genuinely good — but "future" and "this afternoon" are different deployments. For a solo indie, the cheapest migration is the one you can undo, so make sure every stage has a clean exit before you start it.</p>
+
+      <h2>7. Related reads</h2>
+      <ul>
+        <li><a href="/articles/cocos-4-open-source.html">COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?</a> — the "should I" before this "how would I."</li>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)</a> — pick by distribution channel first.</li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60% (Engine Subpackaging + PerfTier)</a> — the 3.8 perf work you'd re-validate on COCOS 4.</li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
