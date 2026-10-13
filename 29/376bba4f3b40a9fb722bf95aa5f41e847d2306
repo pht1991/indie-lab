@@ -1,0 +1,62 @@
+assets/style.css
+  s_2421242316b263::t_9c698036a555da 441-487
+articles/how-i-built-kubi.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/cocos-draw-call-optimization.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/bundle-size-optimization.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/indie-games-2026.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/cocos-web-game-i18n-guide.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/cocos-3.8-to-cc4-migration.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/indie-game-dev-journey.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+src/articles/preview-storefront-sign-3d.html
+  s_2421242316b263::t_3593647ed167cf 16
+  s_2421242316b263::t_e86cd2c3580f32 17-25
+src/template-article.html
+  s_2421242316b263::t_b0091fefd718af 51
+articles/preview-storefront-sign-3d.html
+  s_2421242316b263::t_09e312d6ffcd4c 19,135-155
+build.js
+  s_2421242316b263::t_090d228845fb53 31
+  s_2421242316b263::t_e92240e75e0fd2 111-113,117,138-140,142-152
+  s_2421242316b263::t_8e0ddaf59802d9 105-110,114-116,118-137,141
+articles/indie-tools-2026.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/idle-loop-design.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+src/articles/best-mechanical-keyboards.html
+  s_2421242316b263::t_f96db7ffd17f66 16
+  s_2421242316b263::t_45ad0136776674 17-26
+articles/cocos-creator-beginner-guide.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/best-mechanical-keyboards.html
+  s_2421242316b263::t_09e312d6ffcd4c 19,163-188
+articles/cocos-4-open-source.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+articles/cocos-vs-unity-vs-godot.html
+  s_2421242316b263::t_09e312d6ffcd4c 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "29376bba4f3b40a9fb722bf95aa5f41e847d2306",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
