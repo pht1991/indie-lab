@@ -1,0 +1,144 @@
+<script type="application/json" id="page-meta">
+{
+  "title": "How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study",
+  "description": "A from-the-trenches breakdown of shipping a 750×1334 survival/crafting mini-game on Cocos Creator 3.8: UI grid architecture, performance budget, i18n for overseas, and what I'd do differently.",
+  "canonical": "https://phtbyte.com/articles/how-i-built-kubi.html",
+  "ogTitle": "How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study",
+  "ogDescription": "A from-the-trenches breakdown of shipping a survival/crafting mini-game on Cocos Creator 3.8.",
+  "ogImage": "og-kubi.png",
+  "ogImageAlt": "How I Built Super Miserable Adventurer — a Cocos Creator WeChat mini-game case study",
+  "authorName": "Haitao Pan",
+  "authorTitle": "Game Developer & Studio Owner",
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "ldDescription": "A from-the-trenches breakdown of shipping a survival/crafting mini-game on Cocos Creator 3.8.",
+  "ldHeadline": "How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study",
+  "extraLd": []
+}
+</script>
+    <article class="post">
+      <header>
+        <h1>How I Built “Super Miserable Adventurer” — A Cocos Creator WeChat Mini-Game Case Study</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 12 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> I shipped a 750×1334 portrait survival/crafting mini-game on Cocos Creator 3.8 for the WeChat platform. This is the post-mortem — the architecture that held up, the performance traps I walked into, and the overseas-i18n work that turned a Chinese-only build into something portable.</p>
+
+      <div class="callout">
+        Disclaimer: this is a personal engineering write-up. Any tool or engine mentioned is based on my own usage; some links on this site may be affiliate links, but they never affect what I recommend.
+      </div>
+
+      <h2>1. Why this game, why this engine</h2>
+      <p>I wanted a game with a real progression loop — gather, craft, fight, dive dungeons — that still loads fast on a phone. WeChat's mini-game runtime is unforgiving about package size, so the engine choice was less "what's most powerful" and more "what fits the constraint." Cocos Creator 3.8 LTS won on three points: small runtime, real TypeScript support, and a build pipeline that targets WeChat directly. For the full solo-indie engine call — Cocos vs Unity vs Godot — I wrote a longer <a href="/articles/cocos-vs-unity-vs-godot.html">engine comparison breakdown</a>.</p>
+
+      <p>I'm the one making the design calls, so the loop was built around a simple promise to the player: <em>every session should move a number that matters.</em> That single rule drove most of the UI decisions below.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Core loop: gather, craft, fight, dungeon, repeating clockwise around a center promise">
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- center promise -->
+          <rect x="220" y="112" width="240" height="76" rx="12" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="340" y="143" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Every session moves</text>
+          <text x="340" y="166" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">a number that matters</text>
+          <!-- four stations -->
+          <rect x="60" y="30" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="135" y="59" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Gather</text>
+          <rect x="470" y="30" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="545" y="59" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Craft</text>
+          <rect x="470" y="222" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="545" y="251" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Fight</text>
+          <rect x="60" y="222" width="150" height="48" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="135" y="251" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">Dungeon</text>
+          <!-- clockwise arrows -->
+          <line x1="210" y1="54" x2="462" y2="54" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="545" y1="78" x2="545" y2="214" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="470" y1="246" x2="218" y2="246" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="135" y1="222" x2="135" y2="86" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <!-- spokes to center -->
+          <line x1="180" y1="90" x2="240" y2="122" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="500" y1="90" x2="440" y2="122" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="500" y1="210" x2="440" y2="178" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+          <line x1="180" y1="210" x2="240" y2="178" stroke="#2f6df0" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.6"/>
+        </svg>
+        <figcaption>The loop everything serves. Each station feeds the center promise — if a feature doesn't move a number, it didn't ship.</figcaption>
+      </figure>
+
+      <h2>2. The UI layer: a code-only widget library</h2>
+      <p>The biggest architectural win was throwing out prefab-driven UI in favor of a small code-only widget library — think <code>UINode</code>, <code>UILabel</code>, <code>UIButton</code>, <code>UIVStack</code>/<code>UIHStack</code>, <code>UIGrid</code>. Reasons:</p>
+      <ul>
+        <li><strong>Determinism.</strong> Layout is a function of data, not a hand-placed node graph. Refactoring a panel meant editing code, not hunting prefab references.</li>
+        <li><strong>Smaller builds.</strong> No prefab serialization overhead for dozens of near-identical cells.</li>
+        <li><strong>Reuse.</strong> The same grid component drives the home page, the map, and the inventory — one positioning algorithm, three surfaces.</li>
+      </ul>
+
+      <p>The grid is a streaming layout: content height is computed from the row flow, the scroll view's viewport is fixed (not driven by a Widget, which fought <code>scrollToTop</code>), and each cell positions itself relative to <code>contentHeight/2</code>. That one detail killed a week of "scroll lands in the wrong place" bugs. The same code-built-grid idea, pushed to cutting draw calls on real devices, is in my <a href="/articles/cocos-draw-call-optimization.html">Cocos draw-call optimization write-up</a>.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Widget library layers: game panels on top, layout components in the middle, primitives below, Cocos runtime at the base">
+          <defs>
+            <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <rect x="60" y="24" width="560" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="340" y="47" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Game panels — Home · Map · Bag · Battle · Trade</text>
+          <text x="340" y="67" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">declare data + intent, never touch nodes directly</text>
+          <line x1="340" y1="76" x2="340" y2="98" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="102" width="560" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="340" y="125" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Layout components — UIGrid · UIVStack · UIHStack</text>
+          <text x="340" y="145" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">one positioning algorithm, three surfaces</text>
+          <line x1="340" y1="154" x2="340" y2="176" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="180" width="560" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="340" y="203" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Primitives — UINode · UILabel · UIButton · UIShape</text>
+          <text x="340" y="223" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">code-built, pooled, no prefabs</text>
+          <line x1="340" y1="232" x2="340" y2="248" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <rect x="60" y="252" width="560" height="8" rx="4" fill="#2f6df0" fill-opacity="0.25"/>
+          <text x="340" y="276" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Cocos Creator 3.8 nodes &amp; components</text>
+        </svg>
+        <figcaption>The code-only UI stack. Panels talk down one layer at a time — swapping the grid algorithm never touches a panel.</figcaption>
+      </figure>
+
+      <h2>3. Performance budget I had to respect</h2>
+      <p>Mini-game runtimes punish sloppiness. Three fixes moved the needle most:</p>
+      <ul>
+        <li><strong>Skybox cleanup.</strong> An unused 3D backdrop was eating draw calls for nothing. Gone.</li>
+        <li><strong>Engine subpackage.</strong> Splitting the engine out of the main package dropped first-load size hard — critical under WeChat's strict size ceiling. The exact subpackage + asset-splitting routine is in my <a href="/articles/bundle-size-optimization.html">60% bundle-size teardown</a>.</li>
+        <li><strong>PerfTier.</strong> A runtime quality switch that scales effects to the device, so low-end phones don't choke and flagships aren't capped artificially.</li>
+      </ul>
+
+      <blockquote>Rule I now live by: profile before you optimize, but optimize the package size before you profile the frame rate. Size blocks the install; frame rate only blocks the retention.</blockquote>
+
+      <h2>4. The overseas problem: i18n without a rewrite</h2>
+      <p>The original build was Chinese-only, hardcoded strings everywhere. To make it portable I treated text as data:</p>
+      <ul>
+        <li>All visible strings routed through a single localization layer.</li>
+        <li>A shared <code>textMetrics</code> helper estimates label width from character class (CJK vs Latin) so layouts don't collapse when a short Chinese label becomes a long English sentence.</li>
+        <li>Structured fields over concatenated strings — e.g. an <code>isEquipped</code> flag instead of baking "[Equipped]" into the name — so translations stay clean.</li>
+      </ul>
+
+      <p>This is the part most post-mortems skip: <strong>localization is an architecture decision, not a find-and-replace pass.</strong> If you didn't build the seam in week one, you pay for it in a rewrite. I turned that seam into a full <a href="/articles/cocos-web-game-i18n-guide.html">Cocos web-game i18n guide</a> if you want the step-by-step.</p>
+
+      <h2>5. What I'd do differently</h2>
+      <ol>
+        <li><strong>Design the save/cloud layer earlier.</strong> Retention lives or dies on "I can pick this up tomorrow," and that needs a sync story, not a localStorage gamble.</li>
+        <li><strong>Ship one deep loop, not five shallow ones.</strong> The dungeon, the trade system, and the crafting tree each wanted to be the star. Picking one to go deep first would have shipped sooner.</li>
+        <li><strong>Measure fun, not just frames.</strong> I had a perf dashboard before I had a retention dashboard. Inverted priority.</li>
+      </ol>
+
+      <h2>6. Takeaways for other small teams</h2>
+      <p>If you're building a mini-game or web game on a tight runtime: choose the engine by package-size ceiling first, build UI as code not prefabs, and treat i18n as a foundation pour, not a coat of paint. The game below the surface is the same game everywhere — only the words and the width of the text box change.</p>
+
+      <h2>Related reads</h2>
+      <ul>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60%</a></li>
+        <li><a href="/articles/cocos-draw-call-optimization.html">Cocos Creator 3.8 Draw Call Optimization</a></li>
+        <li><a href="/articles/cocos-web-game-i18n-guide.html">The Complete Guide to i18n in a Cocos Web Game</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>

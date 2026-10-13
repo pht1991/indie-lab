@@ -1,0 +1,175 @@
+<script type="application/json" id="page-meta">
+{
+  "title": "The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)",
+  "description": "How I made a Cocos Creator 3.8 web / WeChat mini-game multilingual without a string rewrite: a single localization layer, CJK-aware text metrics, and structured fields instead of concatenated labels.",
+  "canonical": "https://phtbyte.com/articles/cocos-web-game-i18n-guide.html",
+  "ogTitle": "The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)",
+  "ogDescription": "A from-the-trenches i18n architecture for Cocos Creator 3.8 web and mini-game builds.",
+  "ogImage": "og-i18n.png",
+  "ogImageAlt": "The complete guide to i18n in a Cocos web game, without a rewrite",
+  "authorName": "Haitao Pan",
+  "authorTitle": "Game Developer & Studio Owner",
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-09-28",
+  "ldDescription": "How I made a Cocos Creator 3.8 web / mini-game multilingual without a string rewrite.",
+  "ldHeadline": "The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)",
+  "extraLd": []
+}
+</script>
+    <article class="post">
+      <header>
+        <h1>The Complete Guide to i18n in a Cocos Web Game (Without a Rewrite)</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 10 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> Internationalization in a Cocos Creator 3.8 web / WeChat mini-game isn't a find-and-replace pass — it's an architecture decision. I made my originally Chinese-only build portable by routing every visible string through one localization layer, estimating label width per character class (CJK vs Latin) so layouts don't collapse, and pushing structured flags into data instead of baking them into names. Do it in week one, or you pay for it in a rewrite.</p>
+
+      <h2>1. Why i18n is different on a game runtime</h2>
+      <p>Web apps get i18n almost for free: the DOM reflows, CSS handles width, and libraries like i18next plug into the framework. A game runtime gives you none of that. In Cocos, text lives in <code>Label</code> components with fixed or estimated sizes, and a short Chinese label like 「装备」 can become a long English sentence — "Equipped" — that overflows the very cell you laid out by hand.</p>
+
+      <p>I learned this the hard way. My first build had Chinese strings hardcoded across panels. The moment I wanted an English build, I faced either a painful grep-and-replace or a proper seam. I chose the seam, and this guide is the result.</p>
+
+      <p>If you're weighing engines first, the i18n story is part of the bigger picture I covered in <a href="/articles/cocos-vs-unity-vs-godot.html">my Cocos vs Unity vs Godot breakdown</a>.</p>
+
+      <h2>2. The core idea: text as data, not as literals</h2>
+      <p>Step one is boring but non-negotiable: no visible string may live in code or in a prefab's text field. Everything routes through a localization table keyed by a stable id.</p>
+
+      <pre><code>// locales/en.json
+{
+  "item.equipped": "Equipped",
+  "item.locked": "Locked",
+  "battle.flee": "Flee",
+  "bag.title": "Backpack ({cur}/{max})"
+}
+
+// locales/zh.json
+{
+  "item.equipped": "已装备",
+  "item.locked": "未解锁",
+  "battle.flee": "逃跑",
+  "bag.title": "背包({cur}/{max})"
+}</code></pre>
+
+      <p>A single <code>tr(key, params)</code> helper resolves the active locale and fills placeholders. Components subscribe to a locale-change event and re-render their own text. That's the whole foundation — every panel now talks to the table, never to a literal.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="i18n data flow: component requests key, locale table resolves, textMetrics estimates width, layout sizes the node">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- row 1 -->
+          <rect x="30" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="105" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Component</text>
+          <text x="105" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">asks for text</text>
+          <line x1="180" y1="56" x2="222" y2="56" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="230" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="305" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">tr(key, params)</text>
+          <text x="305" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">one seam, no literals</text>
+          <line x1="380" y1="56" x2="422" y2="56" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="430" y="30" width="150" height="52" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="505" y="52" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Locale table</text>
+          <text x="505" y="72" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">en / zh / ja JSON</text>
+          <!-- row 2 -->
+          <line x1="505" y1="82" x2="505" y2="112" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="430" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="505" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">textMetrics</text>
+          <text x="505" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">estimates width</text>
+          <line x1="430" y1="144" x2="388" y2="144" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="230" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="305" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Layout</text>
+          <text x="305" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">sizes the node</text>
+          <line x1="230" y1="144" x2="188" y2="144" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <rect x="30" y="118" width="150" height="52" rx="10" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="105" y="140" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Render</text>
+          <text x="105" y="160" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">engine assembler</text>
+        </svg>
+        <figcaption>The whole i18n seam: components never hold literals — they ask, resolve, measure, then render.</figcaption>
+      </figure>
+
+      <p>This is the same discipline I described in my <a href="/articles/how-i-built-kubi.html">Cocos mini-game post-mortem</a>: build UI as code, and treat strings as just another data field.</p>
+
+      <h2>3. The part most guides skip: width estimation</h2>
+      <p>Reflowing game text is the real pain. The browser does it for free; Cocos does not. A label sized for 「已装备」 (3 CJK glyphs ≈ 3× font size) will clip "Equipped" if you assumed the same width. I solved this with a shared <code>textMetrics</code> helper that estimates label width from character class:</p>
+
+      <pre><code>// ui/textMetrics.ts — rough width estimate per char class
+function charUnits(ch: string): number {
+  const code = ch.codePointAt(0)!;
+  // CJK ranges: 0x2E80–0x9FFF, 0x3000–0x30FF, 0xFF00–0xFFEF
+  if (code >= 0x2E80 && code <= 0x9FFF) return 1.0;   // full-width
+  if (code >= 0x3000 && code <= 0x30FF) return 1.0;   // kana / full-width punctuation
+  if (code >= 0xFF00 && code <= 0xFFEF) return 1.0;   // full-width forms
+  return 0.55;                                        // latin / narrow
+}
+
+export function estimateTextWidth(text: string, fontSize: number): number {
+  let units = 0;
+  for (const ch of text) units += charUnits(ch);
+  return units * fontSize;
+}</code></pre>
+
+      <p>With that, a parent container can size itself from the <em>estimated</em> width of the active language before the engine's own text layout runs. It's not pixel-perfect (the engine's assembler is the source of truth at render time), but it gets panels into the right ballpark so nothing overflows on first paint. When a label has no fixed width, I leave it auto-sized; when it does, I recompute position from the estimated width rather than assuming the Chinese baseline.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Width estimation: the CJK label is 3 full-width units, the English label is 8 narrow units and ends up wider">
+          <text x="30" y="34" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Same meaning, different width</text>
+          <!-- CJK row -->
+          <text x="30" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a1a1a">已装备</text>
+          <g fill="#2f6df0">
+            <rect x="110" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+            <rect x="146" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+            <rect x="182" y="66" width="30" height="30" rx="4" fill-opacity="0.15" stroke="#2f6df0"/>
+          </g>
+          <text x="230" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">3 glyphs × 1.0 = 3.0 units</text>
+          <!-- EN row -->
+          <text x="30" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a1a1a">Equipped</text>
+          <g stroke="#f0b429" fill="#f0b429" fill-opacity="0.15">
+            <rect x="110" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="130.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="151" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="171.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="192" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="212.5" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="233" y="130" width="16.5" height="30" rx="4"/>
+            <rect x="253.5" y="130" width="16.5" height="30" rx="4"/>
+          </g>
+          <text x="286" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">8 glyphs × 0.55 = 4.4 units</text>
+          <!-- marker line -->
+          <line x1="200" y1="106" x2="200" y2="122" stroke="#c0264a" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="212" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#c0264a">assuming the CJK width clips here</text>
+        </svg>
+        <figcaption>Why layout collapses: the English copy of a 3-glyph Chinese label is ~47% wider. Estimate per character class, not per string.</figcaption>
+      </figure>
+
+      <h2>4. Structured fields beat concatenated strings</h2>
+      <p>A tempting shortcut is to bake state into the name: <code>"[Equipped] Iron Sword"</code>. Don't. It forces every locale to re-express the bracket convention and breaks layout symmetry. Instead, push the flag into data:</p>
+
+      <pre><code>interface GridCellData {
+  id: string;
+  name: string;        // already localized via tr()
+  isEquipped: boolean; // rendered as a separate badge, not in the name
+  subText?: string;
+}</code></pre>
+
+      <p>The badge is a separate node positioned by the layout, the name stays clean, and translations never have to invent a "[已装备]" convention. This single rule probably saved me more rework than anything else.</p>
+
+      <h2>5. Pitfalls I hit</h2>
+      <ol>
+        <li><strong>Numbers and plurals.</strong> "1 item" vs "3 items" — wrap counts through a pluralization helper per locale, don't concatenate "item(s)".</li>
+        <li><strong>Right-to-left wasn't my case, but width still was.</strong> Even left-to-right Latin text is wider than CJK for the same meaning. Size containers from the widest expected locale, not the source one.</li>
+        <li><strong>Font atlas.</strong> Make sure your bitmap/signed-distance-field font actually contains the target glyphs. Missing glyphs render as empty boxes and you'll swear the localization failed when it's really a font-pack problem.</li>
+        <li><strong>Save data.</strong> Never store the translated string; store the key. If you persist "Equipped" into a save file and later rename the English copy, old saves break. Keys are stable; copies change.</li>
+      </ol>
+
+      <h2>6. Takeaways</h2>
+      <p>If you're starting a Cocos web or mini-game and think you might ever ship outside your home market: pour the i18n seam in week one. One localization table, a width estimator keyed on character class, and structured fields instead of concatenated labels. The game below the text is identical everywhere — only the words and the width of the box change. Build the seam early and the "overseas version" becomes a config switch, not a second project.</p>
+
+      <h2>7. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built a Cocos Creator WeChat Mini-Game — full post-mortem</a></li>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: Which Engine for a Solo Indie in 2026</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>

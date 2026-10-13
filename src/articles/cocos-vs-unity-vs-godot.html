@@ -1,0 +1,201 @@
+<script type="application/json" id="page-meta">
+{
+  "title": "Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)",
+  "description": "Which engine for a solo indie in 2026? I ship on Cocos Creator — here's my honest take on package size, TypeScript, and platform targets versus Unity and Godot.",
+  "canonical": "https://phtbyte.com/articles/cocos-vs-unity-vs-godot.html",
+  "ogTitle": "Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)",
+  "ogDescription": "A solo dev who ships on Cocos Creator breaks down package size, TypeScript, and platform targets vs Unity and Godot — and the exact call he'd make.",
+  "ogImage": "og-engine.png",
+  "ogImageAlt": "Cocos Creator vs Unity vs Godot — which engine for a solo indie in 2026",
+  "authorName": "Haitao Pan",
+  "authorTitle": "Game Developer & Studio Owner",
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-10-13",
+  "ldDescription": "Which engine for a solo indie in 2026? I ship on Cocos Creator — here's my honest take on package size, TypeScript, and platform targets versus Unity and Godot.",
+  "ldHeadline": "Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)",
+  "extraLd": [
+    "{\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"FAQPage\",\n    \"mainEntity\": [\n      {\n        \"@type\": \"Question\",\n        \"name\": \"Is Godot or Cocos better for a solo indie in 2026?\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"Both are free and light, so the decider is your distribution channel. Pick Cocos Creator if your first target is a WeChat or HTML5 mini-game — its native build pipeline and tiny first-load package are unmatched there. Pick Godot 4.x if you're shipping a Steam or itch.io 2D game you want to own completely, with MIT licensing and no platform lock-in.\"\n        }\n      },\n      {\n        \"@type\": \"Question\",\n        \"name\": \"Unity vs Godot — which should I pick for 2D?\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"For a solo 2D project in 2026, Godot is the lower-friction choice: free, MIT-licensed, and lightweight with no runtime-fee risk. Choose Unity when you need its 3D tooling depth or plan to hire C# contractors — its Asset Store and talent pool are still the pragmatic default.\"\n        }\n      },\n      {\n        \"@type\": \"Question\",\n        \"name\": \"What is Cocos Creator best at compared to Unity and Godot?\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"Cocos Creator 3.8 wins on first-load package size and native WeChat / web mini-game targets, with first-class TypeScript. It's the right call when a hard runtime size ceiling or a mini-game distribution channel matters more than a large off-the-shelf asset ecosystem.\"\n        }\n      }\n    ]\n  }"
+  ]
+}
+</script>
+    <article class="post">
+      <header>
+        <h1>Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 11 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> For a one-person team in 2026, the engine question is mostly a constraint question, not a "which is most powerful" question. Cocos Creator 3.8 wins when package size and a WeChat / web mini-game target matter; Godot wins for a free, clean 2D/3D codebase you fully own; Unity still wins for 3D breadth, asset-store gravity, and team hiring. I ship on Cocos — but I'd pick differently for a different game.</p>
+
+      <div class="callout">
+        Disclosure: This article contains affiliate links (marked *). If you buy through them, I may earn a commission at no extra cost to you. I only link to courses and books I've actually found useful — they don't change what I recommend.
+      </div>
+
+      <h2>1. Why this matters more than it used to</h2>
+      <p>Five years ago the answer was almost always "Unity, unless you're a purist." In 2026 the math is messier. Unity's runtime-fee saga burned trust, Godot crossed a real usability threshold with 4.x, and Cocos quietly became the default for an entire platform (WeChat mini-games) that no Western engine serves well. For a solo dev, the wrong pick doesn't just cost time — it can cap your distribution before you write a line of gameplay.</p>
+
+      <p>I'm not arguing from benchmarks alone. I run a Cocos Creator 3.8 project in production (a 750×1334 survival/crafting mini-game), so the Cocos column below is lived experience, not a spec sheet. The Unity and Godot columns are from shipping-adjacent work and a lot of rebuilt prototypes.</p>
+
+      <h2>2. The three contenders, honestly</h2>
+
+      <h3>Cocos Creator 3.8</h3>
+      <p>Lightweight runtime, first-class TypeScript, and a build pipeline that targets WeChat and web directly. The trade-off is ecosystem: fewer off-the-shelf assets, a smaller hiring pool, and you'll build more UI plumbing yourself (which is exactly why I built a code-only widget library — see <a href="/articles/how-i-built-kubi.html">my Cocos mini-game post-mortem</a>).</p>
+
+      <h3>Unity</h3>
+      <p>Still the 800-pound gorilla for 3D. Asset Store, tutorials, and freelancers are unmatched. The friction is package size on constrained runtimes and a pricing story that's made teams nervous. If your game is 3D and you ever want to hire, it's hard to beat.</p>
+
+      <h3>Godot 4.x</h3>
+      <p>MIT-licensed, tiny, and shockingly capable for 2D. GDScript is fast to learn; C# is there if you want it. The weak spots are 3D maturity (improving, but not Unity) and a thinner commercial asset market. For a solo 2D project you own end-to-end, it's the cleanest "no strings" option.</p>
+
+      <h2>3. The comparison that actually decides it</h2>
+      <table class="compare">
+        <thead>
+          <tr><th>Factor</th><th>Cocos Creator 3.8</th><th>Unity</th><th>Godot 4.x</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Primary language</td><td>TypeScript</td><td>C#</td><td>GDScript / C#</td></tr>
+          <tr><td>First-load package size</td><td>Very small</td><td>Large (needs splitting)</td><td>Small</td></tr>
+          <tr><td>WeChat / web mini-game</td><td>Native target</td><td>Poor</td><td>Possible, not first-class</td></tr>
+          <tr><td>2D strength</td><td>Strong</td><td>Strong</td><td>Excellent</td></tr>
+          <tr><td>3D strength</td><td>Moderate</td><td>Excellent</td><td>Improving</td></tr>
+          <tr><td>Asset ecosystem</td><td>Small</td><td>Huge</td><td>Growing</td></tr>
+          <tr><td>Licensing risk</td><td>Low</td><td>Historically rocky</td><td>None (MIT)</td></tr>
+          <tr><td>Solo-dev ceiling</td><td>High for 2D/web</td><td>High, heavier</td><td>High, lightest</td></tr>
+        </tbody>
+      </table>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Relative first-load package size: Cocos smallest, Godot small, Unity largest">
+          <text x="40" y="34" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Relative first-load runtime size (qualitative)</text>
+          <!-- Cocos -->
+          <text x="40" y="78" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1a1a1a">Cocos Creator 3.8</text>
+          <rect x="220" y="62" width="150" height="24" rx="6" fill="#2f6df0"/>
+          <text x="380" y="79" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">very small</text>
+          <!-- Godot -->
+          <text x="40" y="122" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1a1a1a">Godot 4.x</text>
+          <rect x="220" y="106" width="200" height="24" rx="6" fill="#7ea4f5"/>
+          <text x="430" y="123" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">small</text>
+          <!-- Unity -->
+          <text x="40" y="166" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1a1a1a">Unity</text>
+          <rect x="220" y="150" width="420" height="24" rx="6" fill="#f0b429"/>
+          <text x="650" y="167" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b6b6b">large — needs splitting</text>
+        </svg>
+        <figcaption>Not benchmarks — the shape of the problem. On a size-capped runtime, the bar length is the whole argument.</figcaption>
+      </figure>
+
+      <h2>Godot vs Cocos, and Unity vs Godot: the head-to-head</h2>
+      <p>The table above is the 30-second version. The queries that actually bring people here are the one-on-one matchups, so here's the direct breakdown of the three pairings searchers ask about most.</p>
+
+      <h3>Godot vs Cocos Creator</h3>
+      <p>For a solo dev building 2D, this is the closest race on the board. Both are free, both are light, and both get out of your way. The decider is the <strong>distribution channel</strong>: if your first target is a WeChat or HTML5 mini-game, Cocos wins outright — its build pipeline targets those runtimes natively and the first-load package stays tiny. If you're shipping a Steam or itch.io 2D game you want to own end-to-end with zero platform lock-in, Godot's MIT license and clean editor make it the more pleasant daily driver. I went Cocos because my game <em>is</em> a WeChat mini-game; on a different game I'd have gone Godot without a second thought.</p>
+
+      <h3>Cocos Creator vs Godot: 3D and the version line</h3>
+      <p>Neither is Unity in 3D, but the gap differs. Cocos Creator 3.8 handles moderate 3D (my mini-game runs a simple 3D skybox and it's perfectly fine), while Godot 4.x's 3D improved a lot but still lags for ambitious scenes. If 3D is more than ~20% of your game, both start to strain and Unity enters the conversation. Watch the version line too: COCOS 4 (the open-source successor to Cocos Creator 3.x) shipped in early 2026 under an MIT license — I broke down whether to migrate in <a href="/articles/cocos-4-open-source.html">my COCOS 4 write-up</a>, and the web/TypeScript story only gets better from here.</p>
+
+      <h3>Unity vs Godot</h3>
+      <p>The classic indie tug-of-war. Unity still wins on 3D breadth, the Asset Store, and hiring; Godot wins on being free, MIT, and lightweight with no pricing surprises. For a solo 2D project in 2026, Godot is the lower-friction choice and Unity's runtime-fee history makes the "free until they change their mind" risk real. Choose Unity when you need its 3D tooling or plan to bring on C# contractors.</p>
+
+      <h2>4. A decision framework, not a verdict</h2>
+      <p>Run your project through these four filters in order — the first one that bites usually decides:</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Engine decision flow: four filters applied in order">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <!-- filter 1 -->
+          <rect x="40" y="20" width="380" height="64" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="60" y="47" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#1a1a1a">1 · Package-size ceiling</text>
+          <text x="60" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#6b6b6b">Hard runtime limit? (WeChat, web)</text>
+          <rect x="470" y="32" width="170" height="40" rx="20" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="555" y="57" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#2f6df0">Cocos / Godot</text>
+          <line x1="420" y1="52" x2="462" y2="52" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="230" y1="84" x2="230" y2="116" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- filter 2 -->
+          <rect x="40" y="120" width="380" height="64" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="60" y="147" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#1a1a1a">2 · Language fit</text>
+          <text x="60" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#6b6b6b">TypeScript brain vs C# brain</text>
+          <rect x="470" y="132" width="170" height="40" rx="20" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="555" y="157" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#2f6df0">Cocos / Unity</text>
+          <line x1="420" y1="152" x2="462" y2="152" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="230" y1="184" x2="230" y2="216" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- filter 3 -->
+          <rect x="40" y="220" width="380" height="64" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="60" y="247" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#1a1a1a">3 · Platform target</text>
+          <text x="60" y="270" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#6b6b6b">Ship where, first?</text>
+          <rect x="470" y="232" width="170" height="40" rx="20" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="555" y="257" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#2f6df0">Decides hard</text>
+          <line x1="420" y1="252" x2="462" y2="252" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="230" y1="284" x2="230" y2="316" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- filter 4 -->
+          <rect x="40" y="320" width="380" height="64" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="60" y="347" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#1a1a1a">4 · 2D vs 3D split</text>
+          <text x="60" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#6b6b6b">Most solo hits are 2D</text>
+          <rect x="470" y="332" width="170" height="40" rx="20" fill="#ffffff" stroke="#e6e6e3"/>
+          <text x="555" y="357" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#2f6df0">Cocos / Godot</text>
+          <line x1="420" y1="352" x2="462" y2="352" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- bottom note -->
+          <text x="40" y="416" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-style="italic" fill="#6b6b6b">The first filter that bites usually decides — don't optimize past it.</text>
+        </svg>
+        <figcaption>The four-filter engine decision flow I run every project through.</figcaption>
+      </figure>
+
+      <h3>4.1 Package-size ceiling</h3>
+      <p>If you're targeting a runtime with a hard size limit (WeChat mini-games are the textbook case), Cocos or Godot start ahead because the runtime itself is small. Unity can work, but you'll spend real effort on addressables and subpackages. I hit this wall directly — splitting the engine into a subpackage was the single biggest first-load win on my project.</p>
+
+      <h3>4.2 TypeScript vs C#</h3>
+      <p>If your brain (and your existing code) is in TS/JS, Cocos feels native. If you came from enterprise C# or want maximum StackOverflow coverage, Unity's C# is the safer bet. Godot's GDScript is the fastest to pick up but the least transferable.</p>
+
+      <h3>4.3 Platform target</h3>
+      <p>WeChat / HTML5 mini-game → Cocos, no contest. Console or heavy 3D → Unity. A PC/Steam 2D game you want to own completely → Godot is a joy. "I'll port everywhere later" is where solo devs drown — pick the platform you'll actually ship to first.</p>
+
+      <h3>4.4 2D vs 3D split</h3>
+      <p>Most solo breakout hits are 2D. For 2D, Cocos and Godot both feel lighter than Unity. For anything genuinely 3D and ambitious, Unity's tooling and asset store still save months.</p>
+
+      <h2>5. The call I'd actually make</h2>
+      <ul>
+        <li><strong>Building a WeChat / web mini-game, 2D:</strong> Cocos Creator 3.8. It's what I use, and the package-size story is the difference between shipping and not.</li>
+        <li><strong>Building a Steam 2D game you own end-to-end:</strong> Godot 4.x. Free, tiny, no licensing anxiety, and the editor gets out of your way.</li>
+        <li><strong>Building 3D, or you might hire help:</strong> Unity. The ecosystem and talent pool are still the pragmatic default.</li>
+        <li><strong>Learning game dev from zero, on a budget:</strong> Godot, then Cocos for web — both free, both gentle.</li>
+      </ul>
+
+      <h2>6. What I'd tell my past self</h2>
+      <ol>
+        <li><strong>Decide the engine by the distribution channel first.</strong> I almost started in Unity for familiarity, then remembered the WeChat size ceiling would have eaten the whole project. Constraint-first saved me.</li>
+        <li><strong>Don't optimize the engine choice longer than a weekend.</strong> The engine is 5% of shipping. The loop, the art, and the retention work are the other 95%.</li>
+        <li><strong>Build UI as code, not prefabs.</strong> Whatever you pick, a small code-driven widget layer pays back fast — I wrote about the exact approach in my <a href="/articles/how-i-built-kubi.html">Cocos UI grid breakdown</a>.</li>
+      </ol>
+
+      <h2>7. Further learning (on Amazon)</h2>
+      <p>Prefer to learn from books you can keep? These are the titles I'd actually point a solo dev to. Prices change, so check the current price on the retailer's page via the link — every link below is an Amazon Associates link using my tag:</p>
+      <ul>
+        <li><a href="https://www.amazon.com/s?k=unity+game+development&tag=phtbyte-20">Unity game development books on Amazon*</a> — best for understanding the C# / 3D path.</li>
+        <li><a href="https://www.amazon.com/s?k=godot+game+development&tag=phtbyte-20">Godot 4.x guides on Amazon*</a> — the fastest on-ramp for the free 2D route.</li>
+        <li><a href="https://www.amazon.com/s?k=cocos+creator&tag=phtbyte-20">Cocos Creator references on Amazon*</a> — thinner shelf, but worth a scan if you go the mini-game route.</li>
+        <li><a href="https://www.amazon.com/s?k=game+design+theory+books&tag=phtbyte-20">Game design theory books on Amazon*</a> — the loop and retention reading that outlasts any engine.</li>
+      </ul>
+      <p><em>*Affiliate links: if you buy through them, I may earn a commission at no extra cost to you.</em></p>
+
+      <h2>Frequently asked questions</h2>
+      <dl class="faq">
+        <dt>Is Godot or Cocos better for a solo indie in 2026?</dt>
+        <dd>Both are free and light, so the decider is your distribution channel. Pick Cocos Creator if your first target is a WeChat or HTML5 mini-game — its native build pipeline and tiny first-load package are unmatched there. Pick Godot 4.x if you're shipping a Steam or itch.io 2D game you want to own completely, with MIT licensing and no platform lock-in.</dd>
+
+        <dt>Unity vs Godot — which should I pick for 2D?</dt>
+        <dd>For a solo 2D project in 2026, Godot is the lower-friction choice: free, MIT-licensed, and lightweight with no runtime-fee risk. Choose Unity when you need its 3D tooling depth or plan to hire C# contractors — its Asset Store and talent pool are still the pragmatic default.</dd>
+
+        <dt>What is Cocos Creator best at compared to Unity and Godot?</dt>
+        <dd>Cocos Creator 3.8 wins on first-load package size and native WeChat / web mini-game targets, with first-class TypeScript. It's the right call when a hard runtime size ceiling or a mini-game distribution channel matters more than a large off-the-shelf asset ecosystem.</dd>
+      </dl>
+
+      <h2>8. Related reads</h2>
+      <ul>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built a Cocos Creator WeChat Mini-Game — full post-mortem</a></li>
+        <li><a href="/articles/bundle-size-optimization.html">Bundle Size Optimization: How I Cut a Cocos Build by 60%</a></li>
+        <li><a href="/articles/cocos-4-open-source.html">COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
