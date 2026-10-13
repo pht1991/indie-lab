@@ -1,0 +1,33 @@
+index.html
+  s_2421242316b263::t_b79e35b37bf515 124-129
+sitemap.xml
+  s_2421242316b263::t_e3827c2b5de120 68-72
+articles/cocos-vs-unity-vs-godot.html
+  s_2421242316b263::t_0f22032dcdb3a8 6-7,10-11,26-27,31
+  s_2421242316b263::t_f0366c7d2dcebd 152
+  s_2421242316b263::t_f8f35378f79e3f 257
+  s_2421242316b263::t_391a03e9c11061 83
+assets/og/gen-og.cjs
+  s_2421242316b263::t_6a40359cbe3e16 66
+articles/cocos-4-open-source.html
+  s_2421242316b263::t_0af4d93cd85ddd 1-199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "23903bfba16f70123fe0d5de7878e51c83374f1b",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
