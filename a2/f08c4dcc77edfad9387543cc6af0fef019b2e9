@@ -1,0 +1,83 @@
+sitemap.xml
+  s_2421242316b263::t_35fba069ecadc8 5,10-11,16-17,22-23,28-29,34-35,40-41,46-47,52-53,55,58-59,64-65,70-71,76-77,79,82-83,88-89
+src/articles/best-mechanical-keyboards.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-132
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+src/articles/indie-game-dev-journey.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-139
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+src/articles/cocos-4-open-source.html
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+  s_2421242316b263::t_cfc06b36599175 1-14,17-160
+src/articles/bundle-size-optimization.html
+  s_2421242316b263::t_b87c7f9ec7458c 16
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-149
+  s_2421242316b263::t_60e271fcfdfd1b 15
+src/articles/how-i-built-kubi.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-144
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+src/articles/preview-storefront-sign-3d.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-104
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+migrate.js
+  s_2421242316b263::t_aa9e78a34f8358 1-54,56-57,59-66,68-72,76-98,101-112
+  s_2421242316b263::t_05fed86eec7a2e 99-100
+  s_2421242316b263::t_9762918af105c3 55,58,67,73-75
+src/articles/cocos-creator-beginner-guide.html
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-183
+src/template-article.html
+  s_2421242316b263::t_63f739c0aa7046 1-25,27-60
+  s_2421242316b263::t_aa8fc85e3de72b 26
+src/articles/idle-loop-design.html
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-146
+src/articles/indie-games-2026.html
+  s_2421242316b263::t_8edc1e75f4e449 16-17
+  s_2421242316b263::t_bf05adea6e3b55 1-14,19-137
+  s_2421242316b263::t_b87c7f9ec7458c 15,18
+articles/preview-storefront-sign-3d.html
+  s_2421242316b263::t_b87c7f9ec7458c 136-142
+src/articles/cocos-3.8-to-cc4-migration.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-162
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+src/articles/cocos-draw-call-optimization.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-142
+  s_2421242316b263::t_60e271fcfdfd1b 15
+  s_2421242316b263::t_b87c7f9ec7458c 16
+src/articles/indie-tools-2026.html
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-126
+src/articles/cocos-vs-unity-vs-godot.html
+  s_2421242316b263::t_bf05adea6e3b55 1-14,19-201
+  s_2421242316b263::t_b87c7f9ec7458c 15-18
+build.js
+  s_2421242316b263::t_d33f5c0339c5eb 3-4,13-18,28-29,111-177
+  s_2421242316b263::t_62f195024347fc 61-63,65
+  s_2421242316b263::t_49686789b1cdf9 1-2,5-12,19-27,30-60,64,66-70,72-88,101-110
+  s_2421242316b263::t_7e3ee8f313aba9 71
+  s_2421242316b263::t_6b8fc9c03488ef 97-98
+  s_2421242316b263::t_b4405720d482eb 89-96,99-100
+src/articles/cocos-web-game-i18n-guide.html
+  s_2421242316b263::t_b87c7f9ec7458c 15-16
+  s_2421242316b263::t_bf05adea6e3b55 1-14,17-175
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.33",
+  "base_commit_sha": "a2f08c4dcc77edfad9387543cc6af0fef019b2e9",
+  "prompts": {},
+  "sessions": {
+    "s_2421242316b263": {
+      "agent_id": {
+        "tool": "workbuddy",
+        "id": "00aab39a-69ad-452b-9fd5-60d74b193a0a",
+        "model": "hy3"
+      },
+      "human_author": "panhaitao-9ap2u <panhaitao@sdpjw.com>",
+      "custom_attributes": {
+        "internal_commit_event_allowlist": "codeup.aliyun.com,codeup-*"
+      }
+    }
+  }
+}
