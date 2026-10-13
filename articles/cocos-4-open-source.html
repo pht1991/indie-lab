@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?</title>
+  <meta name="description" content="COCOS 4 went fully open source under MIT in early 2026. I run a Cocos Creator 3.8 mini-game in production — here's my honest call on whether to migrate, and what actually changed." />
+  <link rel="canonical" href="https://phtbyte.com/articles/cocos-4-open-source.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?" />
+  <meta property="og:description" content="COCOS 4 is open source (MIT): engine/IDE split, AI-native, Steam-bound. My honest 3.8 migration call as a shipping dev." />
+  <meta property="og:url" content="https://phtbyte.com/articles/cocos-4-open-source.html" />
+  <meta property="og:image" content="https://phtbyte.com/assets/og/og-cc4.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="COCOS 4 open source — is it time to leave Cocos Creator 3.8?" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://phtbyte.com/assets/og/og-cc4.png" />
+  <link rel="stylesheet" href="/assets/style.css?v=20261010b" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?",
+    "description": "COCOS 4 went fully open source under MIT in early 2026. I run a Cocos Creator 3.8 mini-game in production — here's my honest call on whether to migrate, and what actually changed.",
+    "author": { "@type": "Person", "name": "Haitao Pan", "jobTitle": "Game Developer & Studio Owner" },
+    "publisher": { "@type": "Organization", "name": "Indie Game Lab" },
+    "datePublished": "2026-10-13",
+    "dateModified": "2026-10-13",
+    "mainEntityOfPage": "https://phtbyte.com/articles/cocos-4-open-source.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/">Indie Game Lab</a>
+      <nav class="site">
+        <a href="/">Home</a>
+        <a href="/#articles">Articles</a>
+        <a href="/#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="post">
+      <header>
+        <h1>COCOS 4 Open Source: Time to Leave Cocos Creator 3.8?</h1>
+        <p class="meta">By Haitao Pan · Game Developer &amp; Studio Owner · 9 min read</p>
+      </header>
+
+      <p><strong>TL;DR:</strong> I run a Cocos Creator 3.8 WeChat mini-game in production. COCOS 4 — fully open-sourced under MIT in early 2026 — is the biggest shift in the Cocos ecosystem in years, but it is <em>not</em> a "drop 3.8 now" signal, especially for mini-game developers. The engine and editor have been split apart (the new IDE is called PinK), WeChat support is rolling out gradually, and 3.8 is still the more stable bet for my use case. Here's the honest breakdown and the call I'm making.</p>
+
+      <h2>1. The headline: what actually shipped</h2>
+      <p>Cocos was acquired by the Chinese gamification company SUD for around $72M in November 2025. On January 5, 2026, SUD announced that <strong>COCOS 4 is fully open source under the standard MIT license</strong> — every commercial clause from the old Cocos Creator has been removed. The public repositories include the engine core (<code>github.com/cocos/cocos4</code>), the cross-platform code, the <code>cocos-cli</code>, and a full headless IDE mode. There is no commercialization target behind it; SUD's stated motive is reaching more developers and feeding more game content into its own ecosystem.</p>
+
+      <p>For a solo dev, "MIT, no strings" is a genuinely big deal. But the headlines skipped the part that actually affects your day-to-day: this isn't a normal version bump.</p>
+
+      <h2>2. The part that confuses everyone: it's not "Cocos Creator 4"</h2>
+      <p>Through versions 1.x, 2.x, and 3.x, "Cocos Creator" meant <em>one thing</em>: the engine and the editor bundled together. COCOS 4 breaks that apart:</p>
+      <ul>
+        <li><strong>COCOS</strong> = the engine only (version 4 is just the latest release number).</li>
+        <li><strong>PinK</strong> = the new standalone IDE. The visual editing features from Cocos Creator migrate here over time.</li>
+        <li><strong>cocos-cli</strong> = headless mode. Core editing functions move to CLI-accessible headless operations that become part of the engine core.</li>
+      </ul>
+      <p>So when you search "Cocos Creator 4," what you actually mean is <strong>COCOS 4 (engine) + PinK (IDE)</strong>. Same lineage, different packaging. If you're evaluating it, search "COCOS 4" — you'll find the right repos and docs.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="COCOS 4 splits the old bundled Cocos Creator into engine plus PinK IDE plus cocos-cli">
+          <text x="20" y="30" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">Before (1.x–3.x): one bundle</text>
+          <rect x="20" y="44" width="300" height="56" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="40" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Cocos Creator</text>
+          <text x="40" y="90" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">engine + editor, locked together</text>
+
+          <text x="360" y="30" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1a1a1a">After (COCOS 4): split apart</text>
+          <rect x="360" y="44" width="300" height="56" rx="10" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="380" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">COCOS 4 (engine)</text>
+          <text x="380" y="90" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">MIT · JS/TS · AI-native</text>
+
+          <rect x="360" y="112" width="145" height="50" rx="10" fill="#fff6e8" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="378" y="135" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">PinK (IDE)</text>
+          <text x="378" y="152" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">visual editing</text>
+
+          <rect x="515" y="112" width="145" height="50" rx="10" fill="#f3eafc" stroke="#9b59b6" stroke-width="1.5"/>
+          <text x="533" y="135" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">cocos-cli</text>
+          <text x="533" y="152" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">headless / CI</text>
+
+          <line x1="170" y1="100" x2="170" y2="250" stroke="#6b6b6b" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="185" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">splits into</text>
+
+          <rect x="20" y="214" width="320" height="40" rx="8" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="40" y="239" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a1a1a">Your game — native all platforms; WeChat mini-game: gradual</text>
+
+          <rect x="360" y="214" width="300" height="40" rx="8" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="380" y="239" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a1a1a">Your game — same target, new toolchain</text>
+        </svg>
+        <figcaption>The brand rename is the surface change. The structural one is engine/editor separation.</figcaption>
+      </figure>
+
+      <h2>3. What changed that a solo dev actually cares about</h2>
+      <ul>
+        <li><strong>MIT, no commercial clauses.</strong> You can read, patch, and even fork the engine into your own modified build. For a one-person team that's been burned by licensing surprises elsewhere, this removes a whole class of risk.</li>
+        <li><strong>AI-native by design.</strong> JavaScript and TypeScript stay the primary languages, and new capabilities are delivered as MCPs or Agents rather than traditional libraries — UI components, for example, ship as fully deliverable Agents, not call-and-use widgets.</li>
+        <li><strong>Lighter and more modular.</strong> The stated goal is "faster, smaller, more efficient," meant to run on any device with a screen.</li>
+        <li><strong>Cross-platform, but read the fine print.</strong> Native platforms are covered across the board; <em>mini-game platform support rolls out gradually</em>, and Steam-class native targets are on the roadmap.</li>
+        <li><strong>Forward compatibility.</strong> COCOS 4 is an evolution of 3.x, follows SemVer, and keeps a minimum six-month deprecate-to-remove window.</li>
+      </ul>
+
+      <h2>4. What it means for a solo indie</h2>
+      <p>The upside is real:</p>
+      <ul>
+        <li>Zero licensing anxiety, forever.</li>
+        <li>You can fix engine bugs yourself instead of waiting on a vendor.</li>
+        <li>An open PR flywheel — more contributors, faster fixes.</li>
+        <li>AI-tooling that actually understands the engine because the source is open.</li>
+      </ul>
+      <p>But the open questions matter more for someone shipping today:</p>
+      <ul>
+        <li><strong>PinK is a new IDE.</strong> The Cocos Creator editor you know (and that I've shipped two projects on) is battle-tested. PinK is where visual editing is migrating — its maturity is unproven.</li>
+        <li><strong>Migration has a cost.</strong> API cleanup and the deprecation cycle mean a 3.x project won't lift-and-shift for free.</li>
+        <li><strong>The WeChat mini-game target is "gradual."</strong> For me this is the dealbreaker line — see below.</li>
+      </ul>
+
+      <h2>5. My call as a Cocos Creator 3.8 developer</h2>
+      <p>My constraints are specific: my game <em>is</em> a WeChat mini-game, it's in production on 3.8, and all my hard-won optimization work — engine subpackaging, asset splitting, a runtime PerfTier — is built on 3.8 (I wrote it up in <a href="/articles/bundle-size-optimization.html">my bundle-size teardown</a>). COCOS 4's WeChat support is still rolling out. Migrating now trades proven stability for an "open source" label I don't strictly need yet.</p>
+      <p>So my decision:</p>
+      <ul>
+        <li><strong>Stay on 3.8</strong> for anything already shipping to WeChat — it's the stable, complete path today.</li>
+        <li><strong>Evaluate COCOS 4</strong> for a <em>new</em> project that needs native/Steam targets, a hard MIT requirement, and can tolerate an early PinK.</li>
+        <li><strong>Watch, don't rush.</strong> The six-month deprecation window and the gradual mini-game rollout both reward patience.</li>
+      </ul>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Migration decision tree from Cocos Creator 3.8 to COCOS 4">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/>
+            </marker>
+          </defs>
+          <rect x="40" y="20" width="320" height="54" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="60" y="45" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Shipping a WeChat mini-game now?</text>
+          <text x="60" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Is the live target WeChat / HTML5?</text>
+
+          <rect x="40" y="120" width="300" height="50" rx="10" fill="#eaf7ee" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="60" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Stay on Cocos Creator 3.8</text>
+          <text x="60" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">Mature, stable, complete mini-game support</text>
+
+          <line x1="200" y1="74" x2="200" y2="116" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="210" y="98" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#27ae60">Yes</text>
+
+          <rect x="400" y="120" width="240" height="54" rx="10" fill="#eaf1ff" stroke="#2f6df0" stroke-width="1.5"/>
+          <text x="420" y="145" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">Need Steam / native + MIT?</text>
+          <text x="420" y="163" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b6b6b">And can tolerate early PinK?</text>
+
+          <line x1="360" y1="47" x2="396" y2="140" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="372" y="92" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#e05656">No</text>
+
+          <rect x="400" y="220" width="240" height="50" rx="10" fill="#fff6e8" stroke="#e0a020" stroke-width="1.5"/>
+          <text x="420" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1a1a1a">Evaluate COCOS 4</text>
+          <text x="420" y="268" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">New project, native-first, MIT-bound</text>
+
+          <line x1="520" y1="174" x2="520" y2="216" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="530" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#27ae60">Yes</text>
+
+          <rect x="40" y="220" width="300" height="50" rx="10" fill="#f4f5f7" stroke="#e0e0dd"/>
+          <text x="60" y="250" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">Pick by distribution channel</text>
+          <text x="60" y="268" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#6b6b6b">See my engine comparison →</text>
+
+          <line x1="400" y1="174" x2="340" y2="240" stroke="#6b6b6b" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="350" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#e05656">No</text>
+        </svg>
+        <figcaption>The decision I run: platform target decides before version number does.</figcaption>
+      </figure>
+
+      <h2>6. If you're still choosing an engine</h2>
+      <p>None of this changes the core advice in <a href="/articles/cocos-vs-unity-vs-godot.html">my Cocos vs Unity vs Godot breakdown</a>: for a WeChat or HTML5 mini-game, the 3.x line's native build pipeline and tiny first-load package are still unmatched. COCOS 4 makes the long-term future of that engine more open and more interesting — it just isn't the tool you need to switch to this afternoon. Decide by your distribution channel first; version number second.</p>
+
+      <h2>7. Related reads</h2>
+      <ul>
+        <li><a href="/articles/cocos-vs-unity-vs-godot.html">Cocos Creator vs Unity vs Godot: My Solo-Indie Pick (2026)</a></li>
+        <li><a href="/articles/how-i-built-kubi.html">How I Built "Super Miserable Adventurer" — A Cocos Creator WeChat Mini-Game Case Study</a></li>
+        <li><a href="/articles/bundle-size-optimization.html">How I Cut My Mini-Game Bundle Size 60% (Engine Subpackaging + PerfTier)</a></li>
+      </ul>
+
+      <p><a href="/">← Back to all field notes</a></p>
+    </article>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>© <span id="year"></span> Indie Game Lab. Built for developers who'd rather read a post-mortem than a press release.</p>
+    </div>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
